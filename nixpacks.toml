@@ -1,0 +1,13 @@
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm install -g pnpm", "pnpm install --ignore-scripts"]
+
+[phases.build]
+cmds = [
+  "cd artifacts/api-server && node build.mjs"
+]
+
+[start]
+cmd = "node artifacts/api-server/dist/bot.mjs"

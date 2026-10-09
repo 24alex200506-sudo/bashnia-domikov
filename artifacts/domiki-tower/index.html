@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Запрет зума — обязательно для Telegram Mini App -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Башня домиков</title>
+
+    <!-- Telegram Mini App SDK — должен быть первым скриптом -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Prefetch шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- PWA / мобильные мета-теги -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#1a1f2e" />
+
+    <!-- Фавиконка -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <style>
+      /* Критический CSS — предотвращает мерцание до загрузки бандла */
+      html, body { margin: 0; padding: 0; background: #1a1f2e; height: 100%; overflow: hidden; }
+      #root { height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

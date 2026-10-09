@@ -1,13 +1,11 @@
 [phases.setup]
-nixPkgs = ["nodejs_20", "nodePackages.pnpm"]
+nixPkgs = ["nodejs_22", "nodePackages.pnpm"]
 
 [phases.install]
 cmds = ["pnpm install --ignore-scripts"]
 
 [phases.build]
-cmds = [
-  "cd artifacts/api-server && node build.mjs"
-]
+cmds = ["cd artifacts/api-server && node build.mjs"]
 
 [start]
 cmd = "node artifacts/api-server/dist/bot.mjs"

@@ -1,0 +1,17 @@
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = [
+  "npm install -g pnpm@9",
+  "pnpm install --ignore-scripts"
+]
+# Railway запускает от корня репо, поэтому workdir — корень
+
+[phases.build]
+cmds = [
+  "cd artifacts/domiki-tower && pnpm run build"
+]
+
+[start]
+cmd = "cd artifacts/domiki-tower && pnpm run start"

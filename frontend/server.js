@@ -1,15 +1,22 @@
-// Простой статический сервер для Railway
 import { createServer } from 'http';
 import { readFileSync, existsSync } from 'fs';
-import { join, extname } from 'path';
+import { join, extname, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const DIST = join(__dirname, 'dist');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Ищем dist рядом с server.js (frontend/dist) или в frontend/dist от корня
+const DIST = existsSync(join(__dirname, 'dist'))
+  ? join(__dirname, 'dist')
+  : join(__dirname, 'frontend', 'dist');
+
 const PORT = process.env.PORT || 3000;
 
+console.log('Serving from:', DIST);
+console.log('Port:', PORT);
+
 const MIME = {
-  '.html': 'text/html',
+  '.html': 'text/html; charset=utf-8',
   '.js':   'application/javascript',
   '.css':  'text/css',
   '.svg':  'image/svg+xml',
@@ -17,18 +24,33 @@ const MIME = {
   '.ico':  'image/x-icon',
   '.json': 'application/json',
   '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
 };
 
 createServer((req, res) => {
-  let filePath = join(DIST, req.url === '/' ? 'index.html' : req.url);
-  if (!existsSync(filePath)) filePath = join(DIST, 'index.html'); // SPA fallback
+  // Убираем query string
+  const url = req.url.split('?')[0];
+  let filePath = join(DIST, url === '/' ? 'index.html' : url);
+
+  // SPA fallback
+  if (!existsSync(filePath)) filePath = join(DIST, 'index.html');
+
+  if (!existsSync(filePath)) {
+    res.writeHead(404);
+    res.end('Not found - dist folder missing');
+    return;
+  }
+
   try {
     const ext = extname(filePath);
     res.setHeader('Content-Type', MIME[ext] || 'application/octet-stream');
-    res.setHeader('Cache-Control', ext === '.html' ? 'no-cache' : 'max-age=31536000');
+    res.setHeader('Cache-Control', ext === '.html' ? 'no-cache' : 'max-age=31536000,immutable');
+    res.writeHead(200);
     res.end(readFileSync(filePath));
-  } catch {
-    res.writeHead(404);
-    res.end('Not found');
+  } catch (e) {
+    res.writeHead(500);
+    res.end('Error: ' + e.message);
   }
-}).listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}).listen(PORT, '0.0.0.0', () => {
+  console.log(`✓ Server running on port ${PORT}`);
+});

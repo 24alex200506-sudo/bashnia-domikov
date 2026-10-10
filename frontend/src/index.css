@@ -82,16 +82,43 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 }
 @keyframes balloon-float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
 .balloon-body {
-  width:80px; height:100px; border-radius:50% 50% 45% 45%;
-  background:linear-gradient(135deg,#1a7fd4,#0d5fa0);
-  border:2px solid #0a4a80;
-  box-shadow:inset -10px -6px rgba(0,0,0,.2),inset 5px 5px rgba(255,255,255,.2);
-  display:flex; align-items:center; justify-content:center;
-  position:relative;
+  width: 100px; height: 125px;
+  border-radius: 50% 50% 48% 48%;
+  background: radial-gradient(circle at 35% 30%, #4db8ff, #1a7fd4 50%, #0a4a80);
+  border: 3px solid rgba(255,255,255,.25);
+  box-shadow:
+    inset -14px -8px rgba(0,0,0,.25),
+    inset 8px 8px rgba(255,255,255,.3),
+    0 8px 24px rgba(10,74,128,.5);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
 }
-.balloon-text { font-size:11px; font-weight:900; color:#fff; text-align:center; line-height:1.3; text-shadow:0 1px 3px rgba(0,0,0,.7), 0 0 8px rgba(0,0,0,.5); }
-.balloon-rope { width:2px; height:24px; background:#888; margin:0 auto; }
-.balloon-basket { width:26px; height:14px; background:#8B6914; border:1px solid #6b4f0f; border-radius:2px; margin:0 auto; }
+.balloon-body::after {
+  content: '';
+  position: absolute;
+  top: 12%; left: 18%;
+  width: 35%; height: 30%;
+  background: rgba(255,255,255,.25);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  filter: blur(3px);
+}
+.balloon-text {
+  font-size: 12px; font-weight: 900; color: #fff;
+  text-align: center; line-height: 1.3;
+  text-shadow: 0 1px 4px rgba(0,0,0,.8), 0 0 10px rgba(0,0,0,.6);
+  z-index: 1; position: relative;
+  letter-spacing: .02em;
+}
+.balloon-rope { width: 2px; height: 28px; background: linear-gradient(180deg,#aaa,#666); margin: 0 auto; }
+.balloon-basket {
+  width: 36px; height: 20px;
+  background: linear-gradient(180deg, #c49a3c, #8B6914);
+  border: 2px solid #6b4f0f;
+  border-radius: 3px 3px 5px 5px;
+  margin: 0 auto;
+  box-shadow: inset 0 -3px rgba(0,0,0,.3), 0 3px 6px rgba(0,0,0,.3);
+}
 
 /* City buildings background */
 .city-bg {
@@ -236,18 +263,26 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .gameover-bank-note{font-size:11px;font-weight:700;color:rgba(255,209,102,.5);margin-top:2px;}
 .bank-collect-btn-big{width:100%;padding:14px 24px;border-radius:var(--r-md);background:linear-gradient(180deg,#ffe066,#f5c842 40%,#d4a017);color:#3a2000;font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:3px solid #8B6400;box-shadow:0 4px 0 #8B6400;cursor:pointer;margin-top:6px;}
 
-/* ??? BOTTOM PANEL ? Tower Rush style ??? */
+/* ── НИЖНЯЯ ПАНЕЛЬ ── */
 .bottom-bar {
-  flex:none; display:flex; align-items:stretch;
-  background:linear-gradient(180deg,#1e2d42,#141e2e);
-  border-top:3px solid #0a1520;
-  min-height:72px; position:relative; z-index:10;
-  /* ????? ??????? ??? ? Tower Rush */
-  box-shadow:inset 0 3px 0 rgba(255,209,102,.15);
+  flex: none;
+  display: flex;
+  align-items: stretch;
+  background: linear-gradient(180deg, #1a1a2e, #0f0f1e);
+  border-top: 2px solid rgba(255,209,102,.2);
+  min-height: 76px;
+  position: relative;
+  z-index: 10;
 }
 
-/* ????? ??? ?? */
-/* Кнопка СТРОЙ — большая, в нижней панели */
+.bottom-game-row {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* Кнопка СТРОЙ */
 .bottom-build-btn {
   flex: 1;
   display: flex;
@@ -255,29 +290,69 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 10px 20px;
-  background: linear-gradient(180deg, #ffe066, #f5c842 40%, #d4a017);
+  padding: 12px 20px;
+  background: linear-gradient(180deg, #ffe566 0%, #f5c030 45%, #d4960a 100%);
   border: none;
   cursor: pointer;
-  transition: transform .1s, filter .1s;
   position: relative;
   overflow: hidden;
+  transition: filter .1s;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.35), inset 0 -3px 0 rgba(0,0,0,.25);
 }
 .bottom-build-btn::before {
   content: '';
   position: absolute;
-  top: 0; left: -100%;
-  width: 60%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
   animation: btn-shine 2.5s infinite;
 }
 @keyframes btn-shine { 0%{left:-100%} 60%,100%{left:150%} }
-.bottom-build-btn:active { transform: scale(.97); filter: brightness(.9); }
-.bottom-build-icon { font-size: 22px; line-height: 1; }
+.bottom-build-btn:active { filter: brightness(.88); transform: scaleY(.97); }
 .bottom-build-text {
   font-family: 'Oswald', sans-serif;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
+  color: #3a2000;
+  letter-spacing: .1em;
+  line-height: 1;
+  text-shadow: 0 1px 0 rgba(255,255,255,.4);
+}
+.bottom-build-sub {
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(58,32,0,.65);
+  letter-spacing: .05em;
+}
+
+/* Кнопка ЗАБРАТЬ */
+.bottom-collect-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 18px;
+  background: linear-gradient(180deg, #3ddc84, #22a85f);
+  border-left: 2px solid rgba(0,0,0,.2);
+  cursor: pointer;
+  min-width: 100px;
+  transition: filter .1s;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.25);
+}
+.bottom-collect-btn:active { filter: brightness(.88); }
+.bottom-collect-amount {
+  font-size: 17px; font-weight: 900; color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4);
+  letter-spacing: -.02em;
+}
+.bottom-collect-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,.8);
+  letter-spacing: .12em;
+}
+
+/* Кнопка СДЕЛАТЬ СТАВКУ */
   color: #3a2000;
   letter-spacing: .08em;
   line-height: 1;

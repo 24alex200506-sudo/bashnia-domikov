@@ -89,9 +89,14 @@ export function useBalance() {
         } catch { /* сервер недоступен */ }
       }
       const localBalance = loadNum(BALANCE_KEY);
-      const balance = serverBalance !== null
+      let balance = serverBalance !== null
         ? Math.max(serverBalance, localBalance)
         : localBalance;
+      // Стартовый бонус 100₽ для новых игроков
+      if (balance === 0) {
+        balance = 100;
+        saveNum(BALANCE_KEY, 100);
+      }
       setState({ balance, activeBet: 0, pendingWin: 0, username, isLoaded: true });
     }
     init();

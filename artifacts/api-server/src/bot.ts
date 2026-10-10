@@ -112,7 +112,7 @@ async function handleMessage(msg: TgMessage) {
           inline_keyboard: [[
             {
               text: "🎮 Открыть игру",
-              web_app: { url: MINI_APP_URL },
+              web_app: { url: MINI_APP_URL + "?balance=" + getBalance(fromId) },
             },
           ]],
         },

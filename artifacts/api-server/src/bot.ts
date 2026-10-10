@@ -15,7 +15,7 @@
  *   /me     — посмотреть свой баланс
  */
 
-import { addBalance, setBalance, getBalance, getAllRecords, findByUsername } from "./lib/balanceStore.js";
+import { addBalance, setBalance, getBalance, getRecord, getAllRecords, findByUsername } from "./lib/balanceStore.js";
 
 // ── Типы Telegram Bot API (минимальные) ────────────────────────────────────
 
@@ -253,14 +253,15 @@ async function handleMessage(msg: TgMessage) {
     }
   }
 
-  // Регистрируем пользователя при любом сообщении
+  // Регистрируем пользователя при любом сообщении — всегда обновляем username
   if (fromId > 0) {
-    const existing = findByUsername(fromUsername);
-    if (!existing || existing.userId !== fromId) {
-      // Сохраняем без изменения баланса (0 если нет)
-      const currentBalance = getBalance(fromId);
-      addBalance(fromId, fromUsername, 0); // создаёт запись если нет
-      void currentBalance;
+    const existing = getRecord(fromId);
+    if (!existing) {
+      // Новый игрок — создаём запись с балансом 0
+      setBalance(fromId, fromUsername, 0);
+    } else if (existing.username !== fromUsername) {
+      // Username изменился — обновляем
+      setBalance(fromId, fromUsername, existing.balance);
     }
   }
 }

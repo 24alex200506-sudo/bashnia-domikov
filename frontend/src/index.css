@@ -355,13 +355,14 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
 /* ── Анимация падения домика ── */
 .house-new {
-  animation: house-drop 0.45s cubic-bezier(.15,1.4,.35,1) both;
+  animation: house-fall 0.5s cubic-bezier(.15, 1.5, .35, 1) both !important;
+  transform-origin: center bottom !important;
 }
-@keyframes house-drop {
-  0%   { transform: translateY(-80px) scale(.8); opacity: 0; }
-  55%  { transform: translateY(6px) scale(1.05); opacity: 1; }
-  75%  { transform: translateY(-3px) scale(.98); }
-  100% { transform: translateY(0) scale(1); opacity: 1; }
+@keyframes house-fall {
+  0%   { transform: translateY(-150px) rotate(-6deg) scale(.85); opacity: 0; }
+  55%  { transform: translateY(8px) rotate(1deg) scale(1.04); opacity: 1; }
+  75%  { transform: translateY(-4px) rotate(0deg) scale(.98); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
 }
 
 /* ── Шар крупнее и текст читаем ── */

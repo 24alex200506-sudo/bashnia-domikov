@@ -50,6 +50,7 @@ export interface TowerGameSnapshot {
   status: TowerStatus;
   houses: HouseView[];
   activeHouse: ActiveHouseView | null;
+  fallingHouse: HouseView | null;
   cameraOffset: number;
   sessionEarnings: number;
   placedCount: number;
@@ -111,7 +112,7 @@ export function useTowerGame(
   });
 
   const [snapshot, setSnapshot] = useState<TowerGameSnapshot>({
-    status: 'ready', houses: [], activeHouse: null, cameraOffset: 0,
+    status: 'ready', houses: [], activeHouse: null, fallingHouse: null, cameraOffset: 0,
     sessionEarnings: 0, placedCount: 0, bestHeight: getBestHeight(),
     lives: STARTING_LIVES, lastAward: null, rewardPerHouse: BASE_REWARD,
   });
@@ -197,9 +198,18 @@ export function useTowerGame(
 
     const publish = () => {
       const v = valuesRef.current;
+      // fallingHouse — последний домик в башне пока он ещё settling (летит)
+      const isSettling = statusRef.current === 'settling';
+      const newestHouse = isSettling && housesRef.current.length > 0
+        ? housesRef.current[housesRef.current.length - 1]
+        : null;
+      const fallingHouse = newestHouse && !newestHouse.body.isStatic
+        ? snapshotHouse(newestHouse)
+        : null;
       setSnapshot({
         status: statusRef.current, houses: housesRef.current.map(snapshotHouse),
         activeHouse: activeRef.current ? { ...activeRef.current } : null,
+        fallingHouse,
         cameraOffset: cameraOffsetRef.current, sessionEarnings: v.sessionEarnings,
         placedCount: v.placedCount, bestHeight: v.bestHeight,
         lives: v.lives, lastAward: v.lastAward, rewardPerHouse: getReward(),

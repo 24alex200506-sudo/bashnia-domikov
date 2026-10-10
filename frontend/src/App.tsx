@@ -79,13 +79,14 @@ function ActiveHouseOnCrane({ house, chainLen }: {
 }
 
 // ─── Поставленный домик ────────────────────────────────────────────────────
-function HouseDrawing({ house }: {
+function HouseDrawing({ house, isNew }: {
   house: { x:number; y:number; width:number; height:number; angle?:number;
     bodyColor:string; roofColor:string; trimColor:string; windows:number; mini?:boolean; };
+  isNew?: boolean;
 }) {
   return (
     <div
-      className={`house${house.mini ? ' house-mini' : ''}`}
+      className={`house${house.mini ? ' house-mini' : ''}${isNew ? ' house-new' : ''}`}
       style={{
         left:   `${((house.x - house.width  / 2) / 440) * 100}%`,
         top:    `${((house.y - house.height / 2) / 720) * 100}%`,
@@ -288,7 +289,10 @@ export default function App() {
           {/* Башня домиков */}
           <div className="stage-world" style={{ transform: `translate3d(0,${snapshot.cameraOffset}px,0)` }}>
             <div className="stage-houses">
-              {snapshot.houses.map(h => <HouseDrawing key={h.id} house={h} />)}
+              {snapshot.houses.map((h, idx) => (
+                <HouseDrawing key={h.id} house={h}
+                  isNew={idx === snapshot.houses.length - 1 && snapshot.status === 'settling'} />
+              ))}
             </div>
           </div>
 

@@ -8,13 +8,15 @@ export default defineConfig({
   resolve: {
     alias: { '@': resolve(__dirname, 'src') },
   },
+  root: __dirname,
   build: {
-    outDir: 'dist',
+    outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
   },
   server: {
     port: Number(process.env.PORT ?? 5173),
     host: '0.0.0.0',
+    allowedHosts: 'all',
   },
   preview: {
     port: Number(process.env.PORT ?? 4173),

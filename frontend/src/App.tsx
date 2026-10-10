@@ -320,7 +320,7 @@ export default function App() {
                 <div className="house-falling" style={{
                   position: 'absolute',
                   left:   `${((snapshot.fallingHouse.x - snapshot.fallingHouse.width  / 2) / 440) * 100}%`,
-                  top:    `${((snapshot.fallingHouse.y - snapshot.fallingHouse.height / 2) / 720) * 100}%`,
+                  top:    `${((snapshot.fallingHouse.y - snapshot.fallingHouse.height / 2 + snapshot.cameraOffset) / 720) * 100}%`,
                   width:  `${(snapshot.fallingHouse.width  / 440) * 100}%`,
                   height: `${(snapshot.fallingHouse.height / 720) * 100}%`,
                   transform: `rotate(${snapshot.fallingHouse.angle}rad)`,

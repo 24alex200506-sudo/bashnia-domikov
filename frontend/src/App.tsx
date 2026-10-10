@@ -425,20 +425,6 @@ export default function App() {
               </button>
             )}
           </div>
-        ) : activeBet > 0 ? (
-          <div className="bottom-active-bet">
-            <div className="bottom-bet-left">
-              <span className="bottom-bet-label">Ставка</span>
-              <div className="bottom-bet-row">
-                <span className="bottom-bet-val">{activeBet.toLocaleString('ru')} ₽</span>
-                <span className="bottom-bet-mult">×{multiplier}</span>
-                <span className="bottom-bet-reward">+{snapshot.rewardPerHouse} ₽/дом</span>
-              </div>
-            </div>
-            <button className="bottom-cancel-btn" onClick={cancelBet} disabled={gameActive}>
-              Отменить
-            </button>
-          </div>
         ) : (
           <button className="bottom-place-btn" onClick={() => setShowModal(true)}>
             <Coins size={18} /> СДЕЛАТЬ СТАВКУ

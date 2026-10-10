@@ -354,14 +354,14 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 @media(min-width:480px){.tma-shell{max-width:440px;margin:0 auto;}html{background:#0a0e1a;}}
 
 /* ── Анимация падения домика ── */
-.house {
-  animation: house-drop 0.4s cubic-bezier(.2,1.4,.4,1) both;
+.house-new {
+  animation: house-drop 0.45s cubic-bezier(.15,1.4,.35,1) both;
 }
 @keyframes house-drop {
-  0%   { transform: translateY(-60px) rotate(var(--drop-rot, -8deg)) scale(.85); opacity: 0; }
-  60%  { transform: translateY(4px) rotate(0deg) scale(1.04); opacity: 1; }
-  80%  { transform: translateY(-2px) scale(.98); }
-  100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  0%   { transform: translateY(-80px) scale(.8); opacity: 0; }
+  55%  { transform: translateY(6px) scale(1.05); opacity: 1; }
+  75%  { transform: translateY(-3px) scale(.98); }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 /* ── Шар крупнее и текст читаем ── */

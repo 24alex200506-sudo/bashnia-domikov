@@ -318,29 +318,37 @@ export default function App() {
             </div>
           </div>
 
-          {/* Летящий домик — вне stage-world, позиция = физика + cameraOffset */}
-          {snapshot.fallingHouse && (
-            <div style={{
-              position: 'absolute',
-              left:   `${((snapshot.fallingHouse.x - snapshot.fallingHouse.width  / 2) / 440) * 100}%`,
-              top:    `${((snapshot.fallingHouse.y - snapshot.fallingHouse.height / 2 + snapshot.cameraOffset) / 720) * 100}%`,
-              width:  `${(snapshot.fallingHouse.width  / 440) * 100}%`,
-              height: `${(snapshot.fallingHouse.height / 720) * 100}%`,
-              transform: `rotate(${snapshot.fallingHouse.angle}rad)`,
-              zIndex: 6,
-              '--body': snapshot.fallingHouse.bodyColor,
-              '--roof': snapshot.fallingHouse.roofColor,
-              '--trim': snapshot.fallingHouse.trimColor,
-              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,.4))',
-            } as CSSProperties}>
-              <div className="house-roof" />
-              <div className="house-body" style={{ backgroundColor: snapshot.fallingHouse.bodyColor }}>
-                <span className="house-window" style={{ left: '17%' }} />
-                <span className="house-window" style={{ left: '66%' }} />
+          {/* Летящий домик — CSS анимация сверху вниз */}
+          {snapshot.fallingHouse && (() => {
+            const fh = snapshot.fallingHouse!;
+            const targetX = ((fh.x - fh.width / 2) / 440) * 100;
+            const targetY = ((fh.y - fh.height / 2 + snapshot.cameraOffset) / 720) * 100;
+            const w = (fh.width / 440) * 100;
+            const h = (fh.height / 720) * 100;
+            return (
+              <div key={`fall-${lastDroppedId}`} style={{
+                position: 'absolute',
+                left: `${targetX}%`,
+                top: `${targetY}%`,
+                width: `${w}%`,
+                height: `${h}%`,
+                zIndex: 7,
+                '--body': fh.bodyColor,
+                '--roof': fh.roofColor,
+                '--trim': fh.trimColor,
+                animation: 'fall-in 0.6s cubic-bezier(.25,1.4,.4,1) both',
+                transformOrigin: 'center bottom',
+                filter: 'drop-shadow(0 6px 12px rgba(0,0,0,.5))',
+              } as CSSProperties}>
+                <div className="house-roof" />
+                <div className="house-body" style={{ backgroundColor: fh.bodyColor }}>
+                  <span className="house-window" style={{ left: '17%' }} />
+                  <span className="house-window" style={{ left: '66%' }} />
+                </div>
+                <div className="house-trim" />
               </div>
-              <div className="house-trim" />
-            </div>
-          )}
+            );
+          })()}
 
           {/* Домик на цепи — по центру, качается */}
           {snapshot.activeHouse && (

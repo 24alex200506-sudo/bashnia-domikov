@@ -76,6 +76,8 @@ export function useBalance() {
     const userId = tg?.initDataUnsafe?.user?.id;
 
     async function init() {
+      try{const p=new URLSearchParams(window.location.search);const v=Number(p.get("balance"));if(isFinite(v)&&v>0){const c=readLocalBalance();if(v>c){saveNum(BALANCE_KEY,v);console.log("Balance from URL:",v);}}}catch(e){}
+
       let serverBalance: number | null = null;
       if (userId) {
         try {

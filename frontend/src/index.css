@@ -1,520 +1,337 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Nunito:wght@400;500;600;700;800;900&display=swap');
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
-/* ═══════════════════════════════════════════════════
-   VARIABLES
-═══════════════════════════════════════════════════ */
+/* ── Переменные ── */
 :root {
-  --tg-bg: #1a1f2e;
-  --tg-surface: #232a3b;
-  --tg-border: rgba(255,255,255,.08);
-  --bet-blue: #00b4ff;
-  --bet-blue-dark: #0087cc;
-  --bet-blue-glow: rgba(0, 180, 255, .35);
-  --bet-blue-dim: rgba(0, 180, 255, .12);
-  --text-primary: #f0f4ff;
-  --text-secondary: rgba(240,244,255,.55);
-  --text-dim: rgba(240,244,255,.32);
+  --bg: #0f1623;
+  --surface: #1a2235;
+  --border: rgba(255,255,255,.08);
+  --blue: #00b4ff;
+  --blue-dark: #007db8;
+  --blue-glow: rgba(0,180,255,.3);
+  --blue-dim: rgba(0,180,255,.1);
   --green: #3ddc84;
   --red: #ff5c6a;
   --gold: #ffd166;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
-  --radius-xl: 28px;
+  --gold-dim: rgba(255,209,102,.15);
+  --text: #eef2ff;
+  --text-dim: rgba(238,242,255,.5);
+  --text-muted: rgba(238,242,255,.3);
+  --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-xl: 28px;
 }
 
-/* ═══════════════════════════════════════════════════
-   RESET & BASE
-═══════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html {
-  height: 100%;
-  background: var(--tg-bg);
-  /* Убираем скролл — всё умещается в экран */
-  overflow: hidden;
-}
-
-body {
-  height: 100%;
-  font-family: 'Nunito', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  color: var(--text-primary);
-  background: var(--tg-bg);
-  overscroll-behavior: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-#root { height: 100%; }
-
+html, body, #root { height: 100%; overflow: hidden; background: var(--bg); }
+body { font-family: 'Nunito', sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; user-select: none; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
 button { font: inherit; cursor: pointer; border: none; background: none; }
 button:disabled { opacity: .4; cursor: not-allowed; }
 
-/* ═══════════════════════════════════════════════════
-   LOADING
-═══════════════════════════════════════════════════ */
-.tma-loading {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.tma-loading-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--bet-blue);
-  animation: dot-pulse 1.2s ease-in-out infinite both;
-}
+/* ── Loading ── */
+.tma-loading { height: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.tma-loading-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); animation: dot-pulse 1.2s ease-in-out infinite both; }
 .tma-loading-dot:nth-child(2) { animation-delay: .2s; }
 .tma-loading-dot:nth-child(3) { animation-delay: .4s; }
-@keyframes dot-pulse {
-  0%,80%,100% { transform: scale(.5); opacity: .3; }
-  40%          { transform: scale(1);  opacity: 1; }
-}
+@keyframes dot-pulse { 0%,80%,100%{transform:scale(.5);opacity:.3} 40%{transform:scale(1);opacity:1} }
 
-/* ═══════════════════════════════════════════════════
-   TMA SHELL — вся страница
-═══════════════════════════════════════════════════ */
-.tma-shell {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: var(--tg-bg);
-  overflow: hidden;
-  /* Минимальная высота для нормального отображения */
-  min-height: 480px;
-}
-
-/* ═══════════════════════════════════════════════════
-   HEADER
-═══════════════════════════════════════════════════ */
+/* ── Шапка ── */
 .tma-header {
   flex: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px 8px;
-  background: var(--tg-surface);
-  border-bottom: 1px solid var(--tg-border);
-  gap: 8px;
-  min-height: 46px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  min-height: 48px;
 }
 
-.tma-header-left { display: flex; align-items: center; gap: 8px; }
-.tma-title { font-size: 15px; font-weight: 900; letter-spacing: -.03em; }
-.tma-username {
-  font-size: 11px; font-weight: 700;
-  color: var(--text-secondary);
+/* Логотип по центру */
+.header-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: .01em;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255,255,255,.35), 0 2px 8px rgba(0,0,0,.4);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.header-balance {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  z-index: 1;
+}
+
+.header-username {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
   background: rgba(255,255,255,.07);
   border-radius: 999px;
   padding: 2px 8px;
 }
 
-.tma-header-right { display: flex; align-items: center; gap: 8px; }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+}
 
-.tma-session-earn {
-  display: flex; align-items: center; gap: 4px;
-  font-size: 12px; font-weight: 800;
-  color: var(--green);
-  background: rgba(61, 220, 132, .1);
-  border: 1px solid rgba(61, 220, 132, .2);
+/* Кнопка банка в шапке */
+.header-bank-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
   border-radius: 999px;
-  padding: 3px 9px;
+  background: linear-gradient(135deg, rgba(255,209,102,.2), rgba(232,160,32,.25));
+  border: 1px solid rgba(255,209,102,.4);
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+.header-bank-btn:hover:not(:disabled) { background: linear-gradient(135deg, rgba(255,209,102,.3), rgba(232,160,32,.35)); transform: translateY(-1px); }
+.header-bank-btn:disabled { cursor: default; opacity: .8; }
+.header-bank-amount {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(255,209,102,.5);
+}
+.header-bank-collect {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  color: rgba(255,209,102,.7);
+  border-left: 1px solid rgba(255,209,102,.3);
+  padding-left: 6px;
 }
 
-.tma-lives {
-  display: flex; align-items: center; gap: 4px;
+
+.tma-shell {
+  height: 100%; display: flex; flex-direction: column;
+  background: var(--bg); position: relative; overflow: hidden;
 }
-.tma-heart {
-  color: var(--red);
-  transition: opacity .2s, transform .2s;
+
+/* ── Баланс в углу (левый верхний) ── */
+.balance-badge {
+  position: absolute; top: 12px; left: 12px; z-index: 20;
+  display: flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, rgba(0,180,255,.18), rgba(0,100,180,.25));
+  border: 1px solid rgba(0,180,255,.35);
+  border-radius: 999px;
+  padding: 6px 12px 6px 10px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 12px rgba(0,180,255,.2), inset 0 1px 0 rgba(255,255,255,.08);
+  color: var(--text);
 }
+.balance-badge svg { color: var(--blue); flex: none; }
+.balance-badge-amount {
+  font-size: 14px; font-weight: 900; letter-spacing: -.03em;
+  color: #fff; text-shadow: 0 0 12px rgba(0,200,255,.5);
+}
+.balance-badge-user {
+  font-size: 10px; font-weight: 700; color: var(--text-dim);
+  border-left: 1px solid rgba(255,255,255,.15);
+  padding-left: 7px; margin-left: 1px;
+}
+
+/* ── Правый верхний угол ── */
+.top-right-bar {
+  position: absolute; top: 12px; right: 12px; z-index: 20;
+  display: flex; align-items: center; gap: 8px;
+}
+.tma-lives { display: flex; align-items: center; gap: 3px; }
+.tma-heart { color: var(--red); transition: opacity .2s, transform .2s; }
 .tma-heart.lost { opacity: .2; transform: scale(.8); }
-
 .tma-restart-btn {
-  width: 28px; height: 28px;
-  display: grid; place-items: center;
-  border-radius: 8px;
-  background: rgba(255,255,255,.08);
-  color: var(--text-secondary);
+  width: 28px; height: 28px; display: grid; place-items: center;
+  border-radius: 8px; background: rgba(255,255,255,.08); color: var(--text-dim);
   transition: background .15s;
 }
-.tma-restart-btn:hover { background: rgba(255,255,255,.14); }
+.tma-restart-btn:hover { background: rgba(255,255,255,.15); }
 
-/* ═══════════════════════════════════════════════════
-   STAGE WRAP — занимает всё пространство между header и bet-panel
-═══════════════════════════════════════════════════ */
+/* ── Stage ── */
 .tma-stage-wrap {
-  /* Растягиваемся на весь доступный flex-остаток */
-  flex: 1 1 0;
-  min-height: 0;          /* критично для flex shrink */
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: 440px;
-  align-self: center;
-  touch-action: manipulation;
-  background: #1a1f2e;    /* фон пока грузится */
+  flex: 1 1 0; min-height: 0;
+  position: relative; overflow: hidden;
+  width: 100%; max-width: 440px; align-self: center;
+  touch-action: manipulation; background: var(--bg);
 }
-
-/* ═══════════════════════════════════════════════════
-   GAME INTERNALS (без изменений логики)
-═══════════════════════════════════════════════════ */
-.stage-art {
-  position: absolute; inset: 0; overflow: hidden;
-}
-
-/* Виртуальная сцена 440×720. Масштабируется через --stage-scale,
-   которую вычисляет useStageScale и пишет на родительский .tma-stage-wrap */
+.stage-art { position: absolute; inset: 0; overflow: hidden; }
 .stage-scaler {
-  position: absolute;
-  width: 440px;
-  height: 720px;
-  /* Центрируем в контейнере */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(var(--stage-scale, 1));
-  transform-origin: center center;
-  overflow: hidden;
+  position: absolute; width: 440px; height: 720px;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(var(--stage-scale,1));
+  transform-origin: center center; overflow: hidden;
 }
-
-/* stage-world теперь позиционируется внутри stage-scaler */
-.stage-world {
-  position: absolute; inset: 0; will-change: transform;
-}
+.stage-world { position: absolute; inset: 0; z-index: 1; will-change: transform; }
 .sky {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, #9dd5ed 0%, #c4e9ef 42%, #e6f1d9 82%, #c4d4a9 100%);
-  /* sky — дочерний stage-scaler, не stage-world, поэтому не двигается с камерой */
-  z-index: 0;
+  position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(180deg,#9dd5ed,#c4e9ef 42%,#e6f1d9 82%,#c4d4a9);
 }
-.sky::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse at 75% 14%, #fff9dfaa 0 7%, transparent 22%),
-    linear-gradient(180deg, transparent 72%, #78976c35);
-}
-/* stage-world поверх неба */
-.stage-world { z-index: 1; }
-.cloud {
-  position: absolute; height: 17px; width: 62px; border-radius: 999px;
-  background: #fff9e8a8; filter: drop-shadow(0 2px 2px #75a9b123);
-}
+.sky::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse at 75% 14%,#fff9dfaa 0 7%,transparent 22%),linear-gradient(180deg,transparent 72%,#78976c35); }
+.cloud { position:absolute; height:17px; width:62px; border-radius:999px; background:#fff9e8a8; filter:drop-shadow(0 2px 2px #75a9b123); }
 .cloud::before,.cloud::after { content:''; position:absolute; bottom:2px; border-radius:50%; background:inherit; }
-.cloud::before { width:24px;height:24px;left:10px; }
-.cloud::after  { width:32px;height:29px;left:25px; }
+.cloud::before { width:24px; height:24px; left:10px; }
+.cloud::after  { width:32px; height:29px; left:25px; }
 .cloud-one   { top:22%; left:8%;  transform:scale(.85); }
 .cloud-two   { top:45%; right:8%; transform:scale(.62); opacity:.7; }
 .cloud-three { top:66%; left:5%;  transform:scale(.55); opacity:.75; }
-.hill {
-  position: absolute; bottom: -34px; height: 105px; width: 74%;
-  border-radius: 50% 50% 0 0; background: #9bbd88; opacity: .58;
-}
-.hill-left  { left: -28%; }
-.hill-right { right: -36%; bottom: -47px; background: #799c7b; }
-.ground {
-  position: absolute; bottom: 0; height: 3.333%; left: 0; right: 0;
-  background: linear-gradient(#8ba977, #718c68);
-  border-top: 4px solid #e4d3a0;
-}
-.ground::after {
-  content:''; position:absolute; top:8px; left:0; right:0; height:12px; opacity:.38;
-  background: repeating-linear-gradient(90deg, transparent 0 25px, #627f5d 26px 29px);
-}
-.stage-houses { position: absolute; inset: 0; }
+.hill { position:absolute; bottom:-34px; height:105px; width:74%; border-radius:50% 50% 0 0; background:#9bbd88; opacity:.58; }
+.hill-left  { left:-28%; }
+.hill-right { right:-36%; bottom:-47px; background:#799c7b; }
+.ground { position:absolute; bottom:0; height:3.333%; left:0; right:0; background:linear-gradient(#8ba977,#718c68); border-top:4px solid #e4d3a0; }
+.ground::after { content:''; position:absolute; top:8px; left:0; right:0; height:12px; opacity:.38; background:repeating-linear-gradient(90deg,transparent 0 25px,#627f5d 26px 29px); }
+.stage-houses { position:absolute; inset:0; }
 
 /* Домик */
-.house {
-  position: absolute; transform-origin: center center;
-  filter: drop-shadow(0 3px 1px #42536a29);
-}
-.house-body {
-  position: absolute; left: 0; bottom: 0; width: 100%; height: 78%;
-  border: 2px solid rgba(255,255,255,.35); border-radius: 3px 3px 2px 2px;
-  box-shadow: inset -9px 0 rgba(46,56,73,.12), inset 0 -5px rgba(255,255,255,.14);
-}
-.house-roof {
-  position: absolute; z-index: 1; left: -5%; top: 0; width: 110%; height: 21%;
-  border: 1px solid rgba(255,255,255,.38); border-radius: 4px 4px 1px 1px;
-  background: var(--roof);
-  box-shadow: inset 0 3px rgba(255,255,255,.17), inset 0 -4px rgba(46,56,73,.13), 0 3px 0 rgba(51,52,68,.2);
-}
-.house-trim {
-  position: absolute; z-index: 2; left: -4%; width:108%; bottom: 0; height: 9%;
-  background: var(--trim); border: 1px solid rgba(255,255,255,.65); border-radius: 2px;
-  box-shadow: inset 0 2px rgba(255,255,255,.55), 0 3px 0 rgba(51,52,68,.22);
-}
-.house-mini .house-roof { left: -4%; width: 108%; height: 18%; }
-.house-mini .house-trim { height: 10%; }
-.house-window {
-  position: absolute; bottom: 27%; width: 17%; height: 27%;
-  border: 2px solid #fff3d9; border-radius: 2px; background: #7ab9c5;
-  box-shadow: inset 2px 0 #ffffff70, 0 1px 2px #283a5350;
-}
-.house-window::before { content:''; position:absolute; left:0;right:0;top:48%;height:2px;background:#fff3d9; }
-.house-window::after  { content:''; position:absolute; top:0;bottom:0;left:48%;width:2px;background:#fff3d9; }
+.house { position:absolute; transform-origin:center center; filter:drop-shadow(0 3px 1px #42536a29); }
+.house-body { position:absolute; left:0; bottom:0; width:100%; height:78%; border:2px solid rgba(255,255,255,.35); border-radius:3px 3px 2px 2px; box-shadow:inset -9px 0 rgba(46,56,73,.12),inset 0 -5px rgba(255,255,255,.14); }
+.house-roof { position:absolute; z-index:1; left:-5%; top:0; width:110%; height:21%; border:1px solid rgba(255,255,255,.38); border-radius:4px 4px 1px 1px; background:var(--roof); box-shadow:inset 0 3px rgba(255,255,255,.17),inset 0 -4px rgba(46,56,73,.13),0 3px 0 rgba(51,52,68,.2); }
+.house-trim { position:absolute; z-index:2; left:-4%; width:108%; bottom:0; height:9%; background:var(--trim); border:1px solid rgba(255,255,255,.65); border-radius:2px; box-shadow:inset 0 2px rgba(255,255,255,.55),0 3px 0 rgba(51,52,68,.22); }
+.house-mini .house-roof { left:-4%; width:108%; height:18%; }
+.house-mini .house-trim { height:10%; }
+.house-window { position:absolute; bottom:27%; width:17%; height:27%; border:2px solid #fff3d9; border-radius:2px; background:#7ab9c5; box-shadow:inset 2px 0 #ffffff70,0 1px 2px #283a5350; }
+.house-window::before { content:''; position:absolute; left:0; right:0; top:48%; height:2px; background:#fff3d9; }
+.house-window::after  { content:''; position:absolute; top:0; bottom:0; left:48%; width:2px; background:#fff3d9; }
 
-/* Пилюля статуса */
-.live-pill {
-  position: absolute; top: 10px; left: 10px; z-index: 4;
-  display: flex; gap: 6px; align-items: center;
-  padding: 5px 10px; border-radius: 999px;
-  background: rgba(0,0,0,.42); backdrop-filter: blur(6px);
-  color: rgba(255,255,255,.8); font-size: 9px; font-weight: 900;
-  letter-spacing: .1em; text-transform: uppercase;
-}
-.live-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #3ddc84; box-shadow: 0 0 0 3px rgba(61,220,132,.3);
-}
+/* Пилюля */
+.live-pill { position:absolute; top:10px; left:10px; z-index:4; display:flex; gap:6px; align-items:center; padding:5px 10px; border-radius:999px; background:rgba(0,0,0,.42); backdrop-filter:blur(6px); color:rgba(255,255,255,.8); font-size:9px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
+.live-dot { width:6px; height:6px; border-radius:50%; background:#3ddc84; box-shadow:0 0 0 3px rgba(61,220,132,.3); }
 
-/* ─── Overlay (старт / конец) ─── */
-.tma-overlay {
-  position: absolute; inset: 0; z-index: 5;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 6px; padding: 24px;
-  background: rgba(10,14,26,.72); backdrop-filter: blur(4px);
-  animation: overlay-in .3s both cubic-bezier(.2,.8,.2,1);
-}
-@keyframes overlay-in {
-  from { opacity:0; transform:scale(.97); }
-  to   { opacity:1; transform:scale(1); }
-}
-.tma-overlay-kicker {
-  font-size: 10px; font-weight: 900; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--bet-blue); opacity: .8;
-}
-.tma-overlay-title {
-  font-size: 34px; font-weight: 900; letter-spacing: -.05em;
-  color: var(--text-primary); line-height: 1;
-}
-.tma-overlay-sub {
-  font-size: 13px; font-weight: 700; color: var(--text-secondary);
-  text-align: center; max-width: 220px;
-}
-.tma-play-btn {
-  margin-top: 10px;
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 13px 26px; border-radius: var(--radius-md);
-  background: var(--bet-blue);
-  color: #fff; font-size: 14px; font-weight: 900;
-  box-shadow: 0 4px 0 var(--bet-blue-dark), 0 8px 24px var(--bet-blue-glow);
-  transition: transform .15s, box-shadow .15s;
-}
-.tma-play-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 0 var(--bet-blue-dark), 0 12px 28px var(--bet-blue-glow); }
-.tma-play-btn:active { transform: translateY(1px);  box-shadow: 0 2px 0 var(--bet-blue-dark); }
-
-/* Кнопка дропа */
-.tma-drop-btn {
-  position: absolute; z-index: 4; left: 50%; bottom: 14px;
-  transform: translateX(-50%);
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 9px 18px; border-radius: 999px;
-  background: rgba(255,255,255,.18); backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,.22);
-  color: #fff; font-size: 12px; font-weight: 900;
-  box-shadow: 0 2px 12px rgba(0,0,0,.25);
-  white-space: nowrap;
-  transition: background .15s, transform .1s;
-}
-.tma-drop-btn:hover  { background: rgba(255,255,255,.26); transform: translate(-50%,-2px); }
-.tma-drop-btn:active { transform: translate(-50%, 1px); }
-
-/* Всплывашка награды */
-.award-pop {
-  position: absolute; z-index: 6; top: 18%; left: 50%;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: var(--gold); color: #4a3500;
-  padding: 6px 14px; font-size: 13px; font-weight: 900;
-  box-shadow: 0 4px 16px rgba(255, 209, 102, .45);
-  animation: award-float 1.4s both;
+/* ── БАНК ── */
+.bank-display {
+  position: absolute; z-index: 5;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  background: rgba(10,14,26,.85); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,209,102,.3);
+  border-radius: var(--r-xl); padding: 18px 28px;
+  box-shadow: 0 8px 32px rgba(255,180,0,.15), 0 0 0 1px rgba(255,209,102,.1);
+  animation: bank-in .3s cubic-bezier(.2,.8,.2,1);
   pointer-events: none;
 }
-@keyframes award-float {
-  0%   { opacity:0; transform:translate(-50%, 8px); }
-  18%  { opacity:1; transform:translate(-50%, 0); }
-  78%  { opacity:1; }
-  100% { opacity:0; transform:translate(-50%,-14px); }
-}
-
-/* ═══════════════════════════════════════════════════
-   BET PANEL — яркий голубой квадрат снизу
-═══════════════════════════════════════════════════ */
-.bet-panel {
-  flex: none;
-  /* Яркий градиент — голубой как просил пользователь */
-  background: linear-gradient(160deg, #003f6b 0%, #005fa3 40%, #0080cc 100%);
-  border-top: 1px solid rgba(0, 180, 255, .3);
-  box-shadow: 0 -4px 32px rgba(0, 128, 204, .35), inset 0 1px 0 rgba(255,255,255,.1);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  padding: 14px 16px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  /* Пульсирующее свечение когда нет ставки */
-  position: relative;
-  overflow: hidden;
-}
-
-/* Декоративный блик */
-.bet-panel::before {
-  content: '';
-  position: absolute;
-  top: -30px; left: 50%;
-  transform: translateX(-50%);
-  width: 200px; height: 60px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0,200,255,.25), transparent 70%);
-  pointer-events: none;
-}
-
-/* Строка баланса */
-.bet-balance-row {
-  display: flex; align-items: center; justify-content: space-between;
-}
-.bet-balance-label {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .12em;
-  color: rgba(180, 230, 255, .7);
-}
-.bet-balance-value {
-  font-size: 18px; font-weight: 900; letter-spacing: -.04em;
-  color: #fff;
-  text-shadow: 0 0 16px rgba(0, 200, 255, .6);
-}
-
-/* Основной блок: выбор + кнопка */
-.bet-main {
-  display: flex; align-items: center; gap: 10px;
-}
-
-/* Селектор суммы */
-.bet-selector {
-  display: flex; align-items: center; gap: 0;
-  background: rgba(0,0,0,.28);
-  border: 1px solid rgba(0, 180, 255, .3);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  flex: 1;
-}
-
-.bet-step-btn {
-  width: 38px; height: 48px;
-  display: grid; place-items: center;
-  color: var(--bet-blue);
-  background: rgba(0, 180, 255, .08);
-  transition: background .12s;
-  flex: none;
-}
-.bet-step-btn:hover:not(:disabled) { background: rgba(0, 180, 255, .18); }
-.bet-step-btn:active:not(:disabled) { background: rgba(0, 180, 255, .28); }
-
-.bet-amount-display {
-  flex: 1; display: flex; align-items: baseline; justify-content: center; gap: 3px;
-}
-.bet-amount-value {
-  font-size: 22px; font-weight: 900; letter-spacing: -.04em; color: #fff;
-}
-.bet-amount-rub {
-  font-size: 13px; font-weight: 800; color: rgba(180,230,255,.7);
-}
-
-/* Кнопка поставить */
-.bet-place-btn {
-  flex: none;
-  height: 48px; padding: 0 20px;
-  border-radius: var(--radius-md);
-  background: var(--bet-blue);
-  color: #fff; font-size: 13px; font-weight: 900;
-  box-shadow: 0 3px 0 var(--bet-blue-dark), 0 6px 20px var(--bet-blue-glow);
-  white-space: nowrap;
+.bank-display button { pointer-events: auto; }
+@keyframes bank-in { from{opacity:0;transform:translate(-50%,-54%) scale(.95)} to{opacity:1;transform:translate(-50%,-50%) scale(1)} }
+.bank-label { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .15em; color: var(--gold); opacity: .7; }
+.bank-amount { font-size: 36px; font-weight: 900; letter-spacing: -.05em; color: var(--gold); text-shadow: 0 0 20px rgba(255,209,102,.6); line-height: 1; }
+.bank-collect-btn {
+  margin-top: 4px; padding: 10px 22px; border-radius: var(--r-md);
+  background: linear-gradient(135deg, #f4c842, #e8a020);
+  color: #2a1a00; font-size: 14px; font-weight: 900;
+  box-shadow: 0 3px 0 #b07010, 0 6px 20px rgba(255,180,0,.4);
   transition: transform .12s, box-shadow .12s;
 }
-.bet-place-btn:hover:not(:disabled)  { transform: translateY(-1px); box-shadow: 0 4px 0 var(--bet-blue-dark), 0 8px 24px var(--bet-blue-glow); }
-.bet-place-btn:active:not(:disabled) { transform: translateY(1px);  box-shadow: 0 1px 0 var(--bet-blue-dark); }
+.bank-collect-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #b07010, 0 8px 24px rgba(255,180,0,.5); }
+.bank-collect-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #b07010; }
+.bank-hint { font-size: 10px; font-weight: 700; color: var(--text-dim); }
 
-/* Кнопка отменить */
-.bet-cancel-btn {
+/* Большая кнопка забрать на экране конца */
+.bank-collect-btn-big {
+  width: 100%; padding: 14px 24px; border-radius: var(--r-md);
+  background: linear-gradient(135deg, #f4c842, #e8a020);
+  color: #2a1a00; font-size: 16px; font-weight: 900;
+  box-shadow: 0 4px 0 #b07010, 0 8px 24px rgba(255,180,0,.4);
+  transition: transform .12s, box-shadow .12s;
+  margin-top: 6px;
+}
+.bank-collect-btn-big:hover { transform: translateY(-2px); }
+.bank-collect-btn-big:active { transform: translateY(1px); }
+
+/* Overlay */
+.tma-overlay {
+  position:absolute; inset:0; z-index:5;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px; padding:24px 28px;
+  background:rgba(10,14,26,.78); backdrop-filter:blur(4px);
+  animation:overlay-in .3s both cubic-bezier(.2,.8,.2,1);
+}
+@keyframes overlay-in { from{opacity:0;transform:scale(.97)} to{opacity:1;transform:scale(1)} }
+.tma-overlay-kicker { font-size:10px; font-weight:900; letter-spacing:.18em; text-transform:uppercase; color:var(--blue); opacity:.8; }
+.tma-overlay-title  { font-size:32px; font-weight:900; letter-spacing:-.05em; color:var(--text); line-height:1; text-align:center; }
+.tma-overlay-sub    { font-size:12px; font-weight:700; color:var(--text-dim); text-align:center; max-width:220px; }
+.tma-play-btn {
+  margin-top:10px; display:inline-flex; align-items:center; gap:8px;
+  padding:12px 24px; border-radius:var(--r-md);
+  background:var(--blue); color:#fff; font-size:14px; font-weight:900;
+  box-shadow:0 4px 0 var(--blue-dark),0 8px 24px var(--blue-glow);
+  transition:transform .15s,box-shadow .15s;
+}
+.tma-play-btn:hover  { transform:translateY(-2px); box-shadow:0 6px 0 var(--blue-dark),0 12px 28px var(--blue-glow); }
+.tma-play-btn:active { transform:translateY(1px);  box-shadow:0 2px 0 var(--blue-dark); }
+.tma-play-btn.secondary { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); box-shadow:none; margin-top:4px; }
+.tma-drop-btn {
+  position:absolute; z-index:4; left:50%; bottom:14px; transform:translateX(-50%);
+  display:inline-flex; align-items:center; gap:7px; padding:9px 18px;
+  border-radius:999px; background:rgba(255,255,255,.18); backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.22); color:#fff; font-size:12px; font-weight:900;
+  box-shadow:0 2px 12px rgba(0,0,0,.25); white-space:nowrap; transition:background .15s,transform .1s;
+}
+.tma-drop-btn:hover  { background:rgba(255,255,255,.26); transform:translate(-50%,-2px); }
+.tma-drop-btn:active { transform:translate(-50%,1px); }
+.award-pop {
+  position:absolute; z-index:6; top:18%; left:50%; transform:translateX(-50%);
+  border-radius:999px; background:var(--gold); color:#4a3500;
+  padding:6px 14px; font-size:13px; font-weight:900;
+  box-shadow:0 4px 16px rgba(255,209,102,.45);
+  animation:award-float 1.4s both; pointer-events:none;
+}
+@keyframes award-float { 0%{opacity:0;transform:translate(-50%,8px)} 18%{opacity:1;transform:translate(-50%,0)} 78%{opacity:1} 100%{opacity:0;transform:translate(-50%,-14px)} }
+
+/* ── Панель ставки ── */
+.bet-panel {
   flex: none;
-  height: 48px; padding: 0 14px;
-  border-radius: var(--radius-md);
-  background: rgba(255, 92, 106, .18);
-  border: 1px solid rgba(255, 92, 106, .4);
-  color: #ff8a94; font-size: 12px; font-weight: 900;
-  white-space: nowrap;
-  transition: background .12s;
-  display: flex; align-items: center; gap: 6px;
+  background: linear-gradient(160deg,#002a4a,#004a80 50%,#0060a0);
+  border-top: 1px solid rgba(0,180,255,.25);
+  box-shadow: 0 -4px 28px rgba(0,120,200,.3), inset 0 1px 0 rgba(255,255,255,.08);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: 12px 14px 18px; display: flex; flex-direction: column; gap: 8px;
+  position: relative; overflow: hidden;
 }
-.bet-cancel-btn:hover:not(:disabled) { background: rgba(255, 92, 106, .28); }
-.bet-cancel-sum {
-  background: rgba(255,255,255,.12);
-  border-radius: 6px; padding: 1px 6px;
-  font-size: 11px; color: #ffa8b0;
+.bet-panel::before { content:''; position:absolute; top:-30px; left:50%; transform:translateX(-50%); width:180px; height:60px; border-radius:50%; background:radial-gradient(ellipse,rgba(0,200,255,.2),transparent 70%); pointer-events:none; }
+.bet-main { display:flex; align-items:center; gap:10px; }
+.bet-selector { display:flex; align-items:center; flex:1; background:rgba(0,0,0,.3); border:1px solid rgba(0,180,255,.25); border-radius:var(--r-md); overflow:hidden; }
+.bet-step-btn { width:38px; height:46px; display:grid; place-items:center; color:var(--blue); background:rgba(0,180,255,.06); transition:background .12s; flex:none; }
+.bet-step-btn:hover:not(:disabled) { background:rgba(0,180,255,.15); }
+.bet-amount-display { flex:1; display:flex; align-items:baseline; justify-content:center; gap:3px; }
+.bet-amount-value { font-size:22px; font-weight:900; letter-spacing:-.04em; color:#fff; }
+.bet-amount-rub   { font-size:13px; font-weight:800; color:rgba(180,230,255,.6); }
+.bet-place-btn {
+  flex:none; height:46px; padding:0 18px; border-radius:var(--r-md);
+  background:var(--blue); color:#fff; font-size:13px; font-weight:900;
+  box-shadow:0 3px 0 var(--blue-dark),0 6px 18px var(--blue-glow); white-space:nowrap;
+  transition:transform .12s,box-shadow .12s;
 }
-
-/* Строка с инфой о множителе */
-.bet-info-row {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 800;
+.bet-place-btn:hover:not(:disabled)  { transform:translateY(-1px); }
+.bet-place-btn:active:not(:disabled) { transform:translateY(1px); box-shadow:0 1px 0 var(--blue-dark); }
+.bet-cancel-btn {
+  flex:none; height:46px; padding:0 12px; border-radius:var(--r-md);
+  background:rgba(255,92,106,.15); border:1px solid rgba(255,92,106,.35);
+  color:#ff8a94; font-size:12px; font-weight:900; white-space:nowrap;
+  display:flex; align-items:center; gap:6px; transition:background .12s;
 }
-.bet-info-mult {
-  color: var(--gold);
-  background: rgba(255, 209, 102, .15);
-  border: 1px solid rgba(255, 209, 102, .25);
-  border-radius: 6px; padding: 2px 7px;
-}
-.bet-info-sep { color: var(--text-dim); }
-.bet-info-reward {
-  display: flex; align-items: center; gap: 4px;
-  color: var(--green);
-}
-.bet-info-hint { color: rgba(180,230,255,.55); }
-.bet-info-add {
-  margin-left: auto;
-  font-size: 10px; color: var(--gold);
-  background: rgba(255,209,102,.1);
-  border-radius: 6px; padding: 2px 7px;
-}
-
-/* Быстрые кнопки */
-.bet-quick-row {
-  display: flex; gap: 6px;
-}
+.bet-cancel-btn:hover:not(:disabled) { background:rgba(255,92,106,.25); }
+.bet-cancel-sum { background:rgba(255,255,255,.1); border-radius:5px; padding:1px 5px; font-size:11px; color:#ffa8b0; }
+.bet-info-row { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:800; min-height:18px; }
+.bet-info-mult   { color:var(--gold); background:var(--gold-dim); border:1px solid rgba(255,209,102,.2); border-radius:6px; padding:2px 7px; }
+.bet-info-sep    { color:var(--text-muted); }
+.bet-info-reward { display:flex; align-items:center; gap:4px; color:var(--green); }
+.bet-info-hint   { color:rgba(180,230,255,.5); font-size:11px; }
+.bet-quick-row   { display:flex; gap:5px; }
 .bet-quick-btn {
-  flex: 1; height: 30px;
-  border-radius: 8px;
-  background: rgba(0,0,0,.25);
-  border: 1px solid rgba(0,180,255,.18);
-  color: rgba(180,230,255,.75);
-  font-size: 11px; font-weight: 900;
-  transition: background .12s, border-color .12s, color .12s;
+  flex:1; height:28px; border-radius:8px;
+  background:rgba(0,0,0,.25); border:1px solid rgba(0,180,255,.15);
+  color:rgba(180,230,255,.7); font-size:11px; font-weight:900;
+  transition:background .12s,border-color .12s,color .12s;
 }
-.bet-quick-btn:hover { background: rgba(0,180,255,.15); border-color: rgba(0,180,255,.4); }
-.bet-quick-btn.active {
-  background: var(--bet-blue-dim);
-  border-color: var(--bet-blue);
-  color: var(--bet-blue);
-  box-shadow: 0 0 0 1px var(--bet-blue);
-}
+.bet-quick-btn:hover  { background:rgba(0,180,255,.12); border-color:rgba(0,180,255,.35); }
+.bet-quick-btn.active { background:var(--blue-dim); border-color:var(--blue); color:var(--blue); box-shadow:0 0 0 1px var(--blue); }
 
-/* ═══════════════════════════════════════════════════
-   АДАПТИВ
-═══════════════════════════════════════════════════ */
-
-/* Очень маленький экран — убираем быстрые кнопки */
-@media (max-height: 580px) {
-  .bet-quick-row { display: none; }
-  .bet-panel { padding: 10px 14px 14px; gap: 7px; }
-  .tma-header { min-height: 40px; padding: 7px 12px; }
-}
-
-/* Широкий экран — центрируем */
-@media (min-width: 480px) {
-  .tma-shell { max-width: 440px; margin: 0 auto; }
-  html { background: #0d1117; }
-}
+/* ── Адаптив ── */
+@media (max-height:580px) { .bet-quick-row{display:none} .bet-panel{padding:8px 12px 12px;gap:6px} }
+@media (min-width:480px)  { .tma-shell{max-width:440px;margin:0 auto} html{background:#0a0e1a} }

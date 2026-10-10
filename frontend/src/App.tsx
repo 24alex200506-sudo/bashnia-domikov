@@ -348,13 +348,7 @@ export default function App() {
             </div>
           )}
 
-          {/* Кнопка СТРОЙ — всегда видна во время игры */}
-          {isMoving && (
-            <button className="tma-drop-btn"
-              onClick={e => { e.stopPropagation(); dropHouse(); }}>
-              СТРОЙ
-            </button>
-          )}
+          {/* Кнопка СТРОЙ убрана отсюда — теперь в нижней панели */}
 
           {snapshot.lastAward !== null && isMoving && (
             <div className="award-pop" key={`${snapshot.placedCount}-${snapshot.lastAward}`}>
@@ -367,7 +361,15 @@ export default function App() {
 
       {/* ── Нижняя панель ── */}
       <div className="bottom-bar">
-        {activeBet > 0 ? (
+        {isMoving ? (
+          /* Во время игры — большая кнопка СТРОЙ */
+          <button className="bottom-build-btn" onClick={dropHouse}>
+            <span className="bottom-build-icon">🏗️</span>
+            <span className="bottom-build-text">СТРОЙ</span>
+            {activeBet > 0 && <span className="bottom-build-mult">×{multiplier} · +{snapshot.rewardPerHouse} ₽</span>}
+          </button>
+        ) : activeBet > 0 ? (
+          /* Ставка сделана, но не в игре */
           <div className="bottom-active-bet">
             <div className="bottom-bet-left">
               <span className="bottom-bet-label">Ставка</span>
@@ -382,6 +384,7 @@ export default function App() {
             </button>
           </div>
         ) : (
+          /* Нет ставки */
           <button className="bottom-place-btn" onClick={() => setShowModal(true)}>
             <Coins size={18} /> СДЕЛАТЬ СТАВКУ
           </button>

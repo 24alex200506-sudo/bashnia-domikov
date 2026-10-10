@@ -335,3 +335,20 @@ button:disabled { opacity: .4; cursor: not-allowed; }
 /* ── Адаптив ── */
 @media (max-height:580px) { .bet-quick-row{display:none} .bet-panel{padding:8px 12px 12px;gap:6px} }
 @media (min-width:480px)  { .tma-shell{max-width:440px;margin:0 auto} html{background:#0a0e1a} }
+
+/* header-left */
+.header-left { display:flex; align-items:center; z-index:1; }
+
+/* locked play button */
+.tma-play-btn.locked { background:rgba(255,255,255,.15); box-shadow:none; cursor:not-allowed; }
+
+/* gameover bank */
+.gameover-bank { background:rgba(255,209,102,.1); border:1px solid rgba(255,209,102,.25); border-radius:var(--r-md); padding:12px 20px; text-align:center; margin:4px 0; }
+.gameover-bank-label { font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.15em; color:rgba(255,209,102,.6); }
+.gameover-bank-amount { font-size:32px; font-weight:900; letter-spacing:-.05em; color:var(--gold); text-shadow:0 0 16px rgba(255,209,102,.5); line-height:1.1; }
+.gameover-bank-note { font-size:11px; font-weight:700; color:rgba(255,209,102,.5); margin-top:2px; }
+
+/* bet-balance-row */
+.bet-balance-row { display:flex; align-items:center; justify-content:space-between; }
+.bet-balance-label { display:flex; align-items:center; gap:5px; font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.12em; color:rgba(180,230,255,.6); }
+.bet-balance-value { font-size:18px; font-weight:900; letter-spacing:-.04em; color:#fff; text-shadow:0 0 12px rgba(0,200,255,.4); }

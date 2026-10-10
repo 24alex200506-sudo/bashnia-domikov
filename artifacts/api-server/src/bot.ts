@@ -121,6 +121,25 @@ async function handleMessage(msg: TgMessage) {
     return;
   }
 
+
+  // /add <число> — админ пополняет себе: /add 500
+  if (/^\/add\s+\d+(\.\d+)?$/.test(text)) {
+    if (!isAdmin(fromId)) {
+      await sendMessage(chatId, "⛔️ Недоступно. Обратись к администратору.");
+      return;
+    }
+    const amt = Number(text.split(/\s+/)[1]);
+    if (!isFinite(amt) || amt <= 0) {
+      await sendMessage(chatId, "Ошибка. Пример: /add 500");
+      return;
+    }
+    const ex = getRecord(fromId);
+    if (!ex) setBalance(fromId, fromUsername, 0);
+    const nb = addBalance(fromId, fromUsername, amt);
+    await sendMessage(chatId, "+" + amt + " ₽ на балансе.\n💰 Текущий баланс: <b>" + nb + " ₽</b>");
+    return;
+  }
+
   // /me — свой баланс
   if (text === "/me") {
     const balance = getBalance(fromId);

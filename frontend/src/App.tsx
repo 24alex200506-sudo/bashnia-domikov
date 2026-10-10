@@ -204,6 +204,11 @@ export default function App() {
   const { snapshot, startGame, dropHouse, restartGame, stageWidth, stageHeight } =
     useTowerGame(activeBet, handleHousePlaced, handleGameOver);
 
+  // Сохраняем последний активный домик чтобы показывать его пока он летит
+  const lastActiveRef = useRef(snapshot.activeHouse);
+  if (snapshot.activeHouse) lastActiveRef.current = snapshot.activeHouse;
+  const fallingHouse = snapshot.status === 'settling' ? lastActiveRef.current : null;
+
   const stageRef = useStageScale(stageWidth, stageHeight);
 
   const isMoving   = snapshot.status === 'moving';
@@ -293,6 +298,26 @@ export default function App() {
                 <HouseDrawing key={h.id} house={h}
                   isNew={idx === snapshot.houses.length - 1 && snapshot.status === 'settling'} />
               ))}
+              {/* Летящий домик — показываем пока settling */}
+              {fallingHouse && (
+                <div className="house-falling" style={{
+                  position: 'absolute',
+                  left:   `${((fallingHouse.x - fallingHouse.width  / 2) / 440) * 100}%`,
+                  top:    `${((fallingHouse.y - fallingHouse.height / 2) / 720) * 100}%`,
+                  width:  `${(fallingHouse.width  / 440) * 100}%`,
+                  height: `${(fallingHouse.height / 720) * 100}%`,
+                  '--body': fallingHouse.bodyColor,
+                  '--roof': fallingHouse.roofColor,
+                  '--trim': fallingHouse.trimColor,
+                } as CSSProperties}>
+                  <div className="house-roof" />
+                  <div className="house-body" style={{ backgroundColor: fallingHouse.bodyColor }}>
+                    <span className="house-window" style={{ left: '17%' }} />
+                    <span className="house-window" style={{ left: '66%' }} />
+                  </div>
+                  <div className="house-trim" />
+                </div>
+              )}
             </div>
           </div>
 
@@ -366,14 +391,21 @@ export default function App() {
       {/* ── Нижняя панель ── */}
       <div className="bottom-bar">
         {isMoving ? (
-          /* Во время игры — большая кнопка СТРОЙ */
-          <button className="bottom-build-btn" onClick={dropHouse}>
-            <span className="bottom-build-icon">🏗️</span>
-            <span className="bottom-build-text">СТРОЙ</span>
-            {activeBet > 0 && <span className="bottom-build-mult">×{multiplier} · +{snapshot.rewardPerHouse} ₽</span>}
-          </button>
+          /* Во время игры — СТРОЙ + ЗАБРАТЬ */
+          <div className="bottom-game-row">
+            {pendingWin > 0 && (
+              <button className="bottom-collect-btn" onClick={collectWin}>
+                <span className="bottom-collect-amount">+{pendingWin.toLocaleString('ru')} ₽</span>
+                <span className="bottom-collect-label">ЗАБРАТЬ</span>
+              </button>
+            )}
+            <button className="bottom-build-btn" onClick={dropHouse}>
+              <span className="bottom-build-icon">🏗️</span>
+              <span className="bottom-build-text">СТРОЙ</span>
+              {activeBet > 0 && <span className="bottom-build-mult">+{snapshot.rewardPerHouse} ₽</span>}
+            </button>
+          </div>
         ) : activeBet > 0 ? (
-          /* Ставка сделана, но не в игре */
           <div className="bottom-active-bet">
             <div className="bottom-bet-left">
               <span className="bottom-bet-label">Ставка</span>
@@ -388,7 +420,6 @@ export default function App() {
             </button>
           </div>
         ) : (
-          /* Нет ставки */
           <button className="bottom-place-btn" onClick={() => setShowModal(true)}>
             <Coins size={18} /> СДЕЛАТЬ СТАВКУ
           </button>

@@ -155,8 +155,8 @@ export default function App() {
           <div className="live-pill"><span className="live-dot"/>{isMoving?'Ваш ход':isReady?'Готов':isOver?'Раунд завершён':'Приземляется...'}</div>
 
           {isReady&&(<div className="tma-overlay">
-            <p className="tma-overlay-kicker">Башня домиков</p>
-            <h2 className="tma-overlay-title">Построим башню?</h2>
+            <p className="tma-overlay-kicker">Добро пожаловать</p>
+            <h2 className="tma-overlay-title">Nekit Casino</h2>
             <p className="tma-overlay-sub">{activeBet>0?`Ставка ${activeBet} ₽ · ×${multiplier} за домик`:balance===0?'👑 Попроси админа':'Сделай ставку ↓'}</p>
             <button className={`tma-play-btn${activeBet<=0?' locked':''}`} onClick={handleStart} disabled={activeBet<=0}><Sparkles size={16}/>{activeBet>0?'СТРОЙ':'НУЖНА СТАВКА ↓'}</button>
           </div>)}

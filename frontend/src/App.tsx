@@ -84,7 +84,7 @@ export default function App() {
   const multiplier=getBetMultiplier(activeBet);
 
   // Клик по полю — только если есть ставка
-  const handleStageTap=useCallback(()=>{if(!isMoving||activeBet<=0)return;dropHouse();},[isMoving,activeBet,dropHouse]);
+  const handleStageTap=useCallback(()=>{if(!isMoving)return;dropHouse();},[isMoving,activeBet,dropHouse]);
   const handleStart=useCallback((e:React.MouseEvent)=>{e.stopPropagation();startGame();},[startGame]);
 
   // Длина цепи — зависит от высоты башни
@@ -174,7 +174,7 @@ export default function App() {
             </>)}
           </div>)}
 
-          {isMoving&&activeBet>0&&(<button className="tma-drop-btn" onClick={e=>{e.stopPropagation();dropHouse();}}>СТРОЙ</button>)}
+            {isMoving&&(<button className="tma-drop-btn" onClick={e=>{e.stopPropagation();dropHouse();}}>СТРОЙ</button>)}
           {snapshot.lastAward!==null&&isMoving&&(<div className="award-pop" key={`${snapshot.placedCount}-${snapshot.lastAward}`}>+{snapshot.lastAward} ₽</div>)}
         </div></div>
       </div>

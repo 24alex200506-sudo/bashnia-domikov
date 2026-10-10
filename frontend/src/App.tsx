@@ -315,30 +315,32 @@ export default function App() {
                   house={h}
                   isNew={h.id === lastDroppedId} />
               ))}
-              {/* Летящий домик — реальная физика, виден пока settling */}
-              {snapshot.fallingHouse && (
-                <div className="house-falling" style={{
-                  position: 'absolute',
-                  left:   `${((snapshot.fallingHouse.x - snapshot.fallingHouse.width  / 2) / 440) * 100}%`,
-                  top:    `${((snapshot.fallingHouse.y - snapshot.fallingHouse.height / 2 + snapshot.cameraOffset) / 720) * 100}%`,
-                  width:  `${(snapshot.fallingHouse.width  / 440) * 100}%`,
-                  height: `${(snapshot.fallingHouse.height / 720) * 100}%`,
-                  transform: `rotate(${snapshot.fallingHouse.angle}rad)`,
-                  '--body': snapshot.fallingHouse.bodyColor,
-                  '--roof': snapshot.fallingHouse.roofColor,
-                  '--trim': snapshot.fallingHouse.trimColor,
-                  zIndex: 3,
-                } as CSSProperties}>
-                  <div className="house-roof" />
-                  <div className="house-body" style={{ backgroundColor: snapshot.fallingHouse.bodyColor }}>
-                    <span className="house-window" style={{ left: '17%' }} />
-                    <span className="house-window" style={{ left: '66%' }} />
-                  </div>
-                  <div className="house-trim" />
-                </div>
-              )}
             </div>
           </div>
+
+          {/* Летящий домик — вне stage-world, позиция = физика + cameraOffset */}
+          {snapshot.fallingHouse && (
+            <div style={{
+              position: 'absolute',
+              left:   `${((snapshot.fallingHouse.x - snapshot.fallingHouse.width  / 2) / 440) * 100}%`,
+              top:    `${((snapshot.fallingHouse.y - snapshot.fallingHouse.height / 2 + snapshot.cameraOffset) / 720) * 100}%`,
+              width:  `${(snapshot.fallingHouse.width  / 440) * 100}%`,
+              height: `${(snapshot.fallingHouse.height / 720) * 100}%`,
+              transform: `rotate(${snapshot.fallingHouse.angle}rad)`,
+              zIndex: 6,
+              '--body': snapshot.fallingHouse.bodyColor,
+              '--roof': snapshot.fallingHouse.roofColor,
+              '--trim': snapshot.fallingHouse.trimColor,
+              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,.4))',
+            } as CSSProperties}>
+              <div className="house-roof" />
+              <div className="house-body" style={{ backgroundColor: snapshot.fallingHouse.bodyColor }}>
+                <span className="house-window" style={{ left: '17%' }} />
+                <span className="house-window" style={{ left: '66%' }} />
+              </div>
+              <div className="house-trim" />
+            </div>
+          )}
 
           {/* Домик на цепи — по центру, качается */}
           {snapshot.activeHouse && (

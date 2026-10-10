@@ -433,3 +433,12 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   85%  { transform: translateY(-4px) scale(.98); }
   100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
 }
+
+/* ── Анимация падения домика сверху ── */
+@keyframes fall-in {
+  0%   { transform: translateY(-300px) rotate(-8deg) scale(.7); opacity: 0; }
+  50%  { opacity: 1; }
+  75%  { transform: translateY(12px) rotate(2deg) scale(1.05); }
+  88%  { transform: translateY(-6px) rotate(0deg) scale(.97); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+}

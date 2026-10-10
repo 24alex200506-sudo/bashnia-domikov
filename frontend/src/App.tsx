@@ -209,6 +209,17 @@ export default function App() {
   if (snapshot.activeHouse) lastActiveRef.current = snapshot.activeHouse;
   const fallingHouse = snapshot.status === 'settling' ? lastActiveRef.current : null;
 
+  // Отслеживаем ID последнего упавшего домика для анимации
+  const [lastDroppedId, setLastDroppedId] = useState<number>(-1);
+  const prevHousesLen = useRef(snapshot.houses.length);
+  useEffect(() => {
+    if (snapshot.houses.length > prevHousesLen.current) {
+      const last = snapshot.houses[snapshot.houses.length - 1];
+      if (last) setLastDroppedId(last.id);
+    }
+    prevHousesLen.current = snapshot.houses.length;
+  }, [snapshot.houses.length]);
+
   const stageRef = useStageScale(stageWidth, stageHeight);
 
   const isMoving   = snapshot.status === 'moving';
@@ -296,7 +307,7 @@ export default function App() {
             <div className="stage-houses">
               {snapshot.houses.map((h, idx) => (
                 <HouseDrawing key={h.id} house={h}
-                  isNew={idx === snapshot.houses.length - 1 && snapshot.status === 'settling'} />
+                  isNew={h.id === lastDroppedId} />
               ))}
               {/* Летящий домик — показываем пока settling */}
               {fallingHouse && (

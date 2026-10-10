@@ -382,3 +382,53 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   letter-spacing: .08em;
   text-shadow: 0 1px 4px rgba(0,0,0,.6);
 }
+
+/* ── Нижняя панель во время игры — ЗАБРАТЬ + СТРОЙ ── */
+.bottom-game-row {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.bottom-collect-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 8px 16px;
+  background: linear-gradient(180deg, #3ddc84, #27a85f);
+  border: none;
+  border-right: 2px solid rgba(0,0,0,.2);
+  cursor: pointer;
+  min-width: 90px;
+  transition: filter .1s;
+}
+.bottom-collect-btn:active { filter: brightness(.9); }
+.bottom-collect-amount {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -.02em;
+  text-shadow: 0 1px 3px rgba(0,0,0,.3);
+}
+.bottom-collect-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,.8);
+  letter-spacing: .1em;
+}
+
+/* Летящий домик */
+.house-falling {
+  position: absolute;
+  animation: house-fall 0.5s cubic-bezier(.25, 1.5, .5, 1) both;
+}
+@keyframes house-fall {
+  0%   { transform: translateY(-120px) rotate(-5deg) scale(.9); opacity: .6; }
+  70%  { transform: translateY(8px) rotate(1deg) scale(1.03); opacity: 1; }
+  85%  { transform: translateY(-4px) scale(.98); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+}

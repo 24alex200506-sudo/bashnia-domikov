@@ -315,20 +315,22 @@ export default function App() {
                   house={h}
                   isNew={h.id === lastDroppedId} />
               ))}
-              {/* Летящий домик — показываем пока settling */}
-              {fallingHouse && (
+              {/* Летящий домик — реальная физика, виден пока settling */}
+              {snapshot.fallingHouse && (
                 <div className="house-falling" style={{
                   position: 'absolute',
-                  left:   `${((fallingHouse.x - fallingHouse.width  / 2) / 440) * 100}%`,
-                  top:    `${((fallingHouse.y - fallingHouse.height / 2) / 720) * 100}%`,
-                  width:  `${(fallingHouse.width  / 440) * 100}%`,
-                  height: `${(fallingHouse.height / 720) * 100}%`,
-                  '--body': fallingHouse.bodyColor,
-                  '--roof': fallingHouse.roofColor,
-                  '--trim': fallingHouse.trimColor,
+                  left:   `${((snapshot.fallingHouse.x - snapshot.fallingHouse.width  / 2) / 440) * 100}%`,
+                  top:    `${((snapshot.fallingHouse.y - snapshot.fallingHouse.height / 2) / 720) * 100}%`,
+                  width:  `${(snapshot.fallingHouse.width  / 440) * 100}%`,
+                  height: `${(snapshot.fallingHouse.height / 720) * 100}%`,
+                  transform: `rotate(${snapshot.fallingHouse.angle}rad)`,
+                  '--body': snapshot.fallingHouse.bodyColor,
+                  '--roof': snapshot.fallingHouse.roofColor,
+                  '--trim': snapshot.fallingHouse.trimColor,
+                  zIndex: 3,
                 } as CSSProperties}>
                   <div className="house-roof" />
-                  <div className="house-body" style={{ backgroundColor: fallingHouse.bodyColor }}>
+                  <div className="house-body" style={{ backgroundColor: snapshot.fallingHouse.bodyColor }}>
                     <span className="house-window" style={{ left: '17%' }} />
                     <span className="house-window" style={{ left: '66%' }} />
                   </div>

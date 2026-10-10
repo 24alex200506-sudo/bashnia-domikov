@@ -4,24 +4,21 @@ import { useTowerGame } from './game/useTowerGame';
 import { useBalance, getBetMultiplier } from './game/useBalance';
 import { Heart, MousePointer2, RotateCcw, Sparkles, Coins, ChevronUp, ChevronDown } from 'lucide-react';
 
-// ─── Домик (рендер) ────────────────────────────────────────────────────────
+// ─── Домик ──────────────────────────────────────────────────────────────────
 
-function HouseDrawing({
-  house,
-}: {
+function HouseDrawing({ house }: {
   house: {
     x: number; y: number; width: number; height: number;
     angle?: number; bodyColor: string; roofColor: string;
     trimColor: string; windows: number; mini?: boolean;
   };
 }) {
-  const left = `${((house.x - house.width / 2) / 440) * 100}%`;
-  const top  = `${((house.y - house.height / 2) / 720) * 100}%`;
   return (
     <div
       className={`house${house.mini ? ' house-mini' : ''}`}
       style={{
-        left, top,
+        left:   `${((house.x - house.width  / 2) / 440) * 100}%`,
+        top:    `${((house.y - house.height / 2) / 720) * 100}%`,
         width:  `${(house.width  / 440) * 100}%`,
         height: `${(house.height / 720) * 100}%`,
         transform: `rotate(${house.angle ?? 0}rad)`,
@@ -33,11 +30,8 @@ function HouseDrawing({
       <div className="house-roof" />
       <div className="house-body" style={{ backgroundColor: house.bodyColor }}>
         {Array.from({ length: house.windows }).map((_, i) => (
-          <span
-            key={i}
-            className="house-window"
-            style={{ left: `${17 + i * (66 / Math.max(1, house.windows - 1))}%` }}
-          />
+          <span key={i} className="house-window"
+            style={{ left: `${17 + i * (66 / Math.max(1, house.windows - 1))}%` }} />
         ))}
       </div>
       <div className="house-trim" />
@@ -45,132 +39,82 @@ function HouseDrawing({
   );
 }
 
-// ─── Панель ставки ──────────────────────────────────────────────────────────
+// ─── Панель ставки ───────────────────────────────────────────────────────────
 
 const BET_STEPS = [10, 25, 50, 100, 200, 500, 1000];
 
 function BetPanel({
-  balance,
-  activeBet,
-  betInput,
-  multiplier,
-  rewardPerHouse,
-  gameActive,
-  onBet,
-  onCancel,
-  onChangeBetInput,
+  balance, activeBet, betInput, multiplier, rewardPerHouse,
+  gameActive, onBet, onCancel, onChangeBetInput,
 }: {
-  balance: number;
-  activeBet: number;
-  betInput: number;
-  multiplier: number;
-  rewardPerHouse: number;
-  gameActive: boolean;
-  onBet: (amount: number) => void;
-  onCancel: () => void;
-  onChangeBetInput: (amount: number) => void;
+  balance: number; activeBet: number; betInput: number;
+  multiplier: number; rewardPerHouse: number; gameActive: boolean;
+  onBet: (a: number) => void; onCancel: () => void;
+  onChangeBetInput: (a: number) => void;
 }) {
   const hasBet = activeBet > 0;
 
   function stepDown() {
-    const currentIdx = BET_STEPS.indexOf(betInput);
-    if (currentIdx > 0) onChangeBetInput(BET_STEPS[currentIdx - 1]);
-    else {
-      // betInput не в массиве — находим ближайший меньший
-      const smaller = BET_STEPS.filter(s => s < betInput);
-      if (smaller.length) onChangeBetInput(smaller[smaller.length - 1]);
-    }
+    const i = BET_STEPS.indexOf(betInput);
+    if (i > 0) onChangeBetInput(BET_STEPS[i - 1]);
+    else { const s = BET_STEPS.filter(x => x < betInput); if (s.length) onChangeBetInput(s[s.length - 1]); }
   }
-
   function stepUp() {
-    const currentIdx = BET_STEPS.indexOf(betInput);
-    if (currentIdx !== -1 && currentIdx < BET_STEPS.length - 1) {
-      onChangeBetInput(BET_STEPS[currentIdx + 1]);
-    } else if (currentIdx === -1) {
-      // betInput не в массиве — находим ближайший больший
-      const larger = BET_STEPS.filter(s => s > betInput);
-      if (larger.length) onChangeBetInput(larger[0]);
-    }
+    const i = BET_STEPS.indexOf(betInput);
+    if (i !== -1 && i < BET_STEPS.length - 1) onChangeBetInput(BET_STEPS[i + 1]);
+    else if (i === -1) { const s = BET_STEPS.filter(x => x > betInput); if (s.length) onChangeBetInput(s[0]); }
   }
 
   return (
     <div className="bet-panel">
-      {/* Баланс */}
+      {/* Строка баланса */}
       <div className="bet-balance-row">
-        <div className="bet-balance-label"><Coins size={13} /> Баланс</div>
-        <div className="bet-balance-value">{balance.toLocaleString('ru')} ₽</div>
+        <span className="bet-balance-label"><Coins size={12}/> БАЛАНС</span>
+        <span className="bet-balance-value">{balance.toLocaleString('ru')} ₽</span>
       </div>
 
-      {/* Основной блок */}
       <div className="bet-main">
         <div className="bet-selector">
-          <button
-            className="bet-step-btn"
-            onClick={stepDown}
-            disabled={hasBet || gameActive}
-            aria-label="Уменьшить ставку"
-          >
-            <ChevronDown size={18} />
-          </button>
+          <button className="bet-step-btn" onClick={stepDown} disabled={hasBet || gameActive}><ChevronDown size={18}/></button>
           <div className="bet-amount-display">
             <span className="bet-amount-value">{betInput.toLocaleString('ru')}</span>
             <span className="bet-amount-rub">₽</span>
           </div>
-          <button
-            className="bet-step-btn"
-            onClick={stepUp}
-            disabled={hasBet || gameActive}
-            aria-label="Увеличить ставку"
-          >
-            <ChevronUp size={18} />
-          </button>
+          <button className="bet-step-btn" onClick={stepUp} disabled={hasBet || gameActive}><ChevronUp size={18}/></button>
         </div>
 
         {!hasBet ? (
-          <button
-            className="bet-place-btn"
-            onClick={() => onBet(betInput)}
-            disabled={betInput > balance || balance === 0}
-          >
+          <button className="bet-place-btn" onClick={() => onBet(betInput)}
+            disabled={betInput > balance || balance === 0}>
             {balance === 0 ? 'Нет баланса' : betInput > balance ? 'Мало' : 'Поставить'}
           </button>
         ) : (
-          <button
-            className="bet-cancel-btn"
-            onClick={onCancel}
-            disabled={gameActive}
-          >
+          <button className="bet-cancel-btn" onClick={onCancel} disabled={gameActive}>
             Отменить <span className="bet-cancel-sum">{activeBet.toLocaleString('ru')} ₽</span>
           </button>
         )}
       </div>
 
-      {/* Инфо о множителе */}
       <div className="bet-info-row">
         {hasBet ? (
           <>
             <span className="bet-info-mult">×{multiplier} мульт.</span>
             <span className="bet-info-sep">·</span>
-            <span className="bet-info-reward"><Coins size={11} /> +{rewardPerHouse} ₽ / домик</span>
+            <span className="bet-info-reward"><Coins size={11}/> +{rewardPerHouse} ₽ / домик</span>
           </>
         ) : (
-          <>
-            <span className="bet-info-hint">Больше ставка → больше за домик</span>
-            {balance === 0 && <span className="bet-info-add">Пополни у админа</span>}
-          </>
+          <span className="bet-info-hint">
+            {balance === 0 ? '👑 Попроси админа пополнить баланс' : 'Ставь больше — получай больше'}
+          </span>
         )}
       </div>
 
-      {/* Быстрые кнопки */}
       {!hasBet && !gameActive && balance > 0 && (
         <div className="bet-quick-row">
           {BET_STEPS.filter(s => s <= balance).slice(0, 5).map(s => (
-            <button
-              key={s}
-              className={`bet-quick-btn${betInput === s ? ' active' : ''}`}
-              onClick={() => onChangeBetInput(s)}
-            >
-              {s >= 1000 ? `${s / 1000}к` : s}
+            <button key={s} className={`bet-quick-btn${betInput === s ? ' active' : ''}`}
+              onClick={() => onChangeBetInput(s)}>
+              {s >= 1000 ? `${s/1000}к` : s}
             </button>
           ))}
         </div>
@@ -179,54 +123,48 @@ function BetPanel({
   );
 }
 
-// ─── Хук масштабирования сцены ─────────────────────────────────────────────
-// Сцена в игре — 440×720 пикселей (виртуальные).
-// Реальный контейнер может быть любого размера.
-// Вычисляем scale = min(containerW/440, containerH/720) и
-// передаём через CSS-переменную.
-function useStageScale(VIRT_W: number, VIRT_H: number) {
-  const wrapRef = useRef<HTMLDivElement>(null);
+// ─── Масштабирование сцены ───────────────────────────────────────────────────
 
+function useStageScale(W: number, H: number) {
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
+    const el = ref.current; if (!el) return;
     const update = () => {
       const { width, height } = el.getBoundingClientRect();
       if (!width || !height) return;
-      const scale = Math.min(width / VIRT_W, height / VIRT_H);
-      el.style.setProperty('--stage-scale', String(scale));
+      el.style.setProperty('--stage-scale', String(Math.min(width / W, height / H)));
     };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [VIRT_W, VIRT_H]);
-
-  return wrapRef;
+  }, [W, H]);
+  return ref;
 }
 
-// ─── Главный компонент ──────────────────────────────────────────────────────
+// ─── Главный компонент ───────────────────────────────────────────────────────
 
-function App() {
+export default function App() {
   const {
-    balance, activeBet, username, isLoaded,
-    placeBet, cancelBet, addWinnings, endRound,
+    balance, activeBet, pendingWin, username, isLoaded,
+    placeBet, cancelBet, addToPending, collectWin, endRound,
   } = useBalance();
 
   const [betInput, setBetInput] = useState(10);
 
   const handleHousePlaced = useCallback((reward: number) => {
-    addWinnings(reward);
-  }, [addWinnings]);
+    addToPending(reward);
+  }, [addToPending]);
 
-  const handleGameOver = useCallback((won: boolean) => {
-    endRound(won);
+  // 1 жизнь — проиграл сразу, ставка сгорает
+  const handleGameOver = useCallback(() => {
+    endRound();
   }, [endRound]);
 
   const { snapshot, startGame, dropHouse, restartGame, stageWidth, stageHeight } =
     useTowerGame(activeBet, handleHousePlaced, handleGameOver);
 
-  const stageWrapRef = useStageScale(stageWidth, stageHeight);
+  const stageRef = useStageScale(stageWidth, stageHeight);
 
   const isMoving   = snapshot.status === 'moving';
   const isReady    = snapshot.status === 'ready';
@@ -234,14 +172,10 @@ function App() {
   const gameActive = isMoving || snapshot.status === 'settling';
   const multiplier = getBetMultiplier(activeBet);
 
-  const handleStagePress = () => { if (isMoving) dropHouse(); };
-
   if (!isLoaded) {
     return (
       <div className="tma-loading">
-        <div className="tma-loading-dot" />
-        <div className="tma-loading-dot" />
-        <div className="tma-loading-dot" />
+        <div className="tma-loading-dot"/><div className="tma-loading-dot"/><div className="tma-loading-dot"/>
       </div>
     );
   }
@@ -249,107 +183,114 @@ function App() {
   return (
     <div className="tma-shell">
 
-      {/* ── Header ── */}
+      {/* ── Шапка ── */}
       <header className="tma-header">
-        <div className="tma-header-left">
-          <span className="tma-title">🏠 Башня</span>
-          {username && <span className="tma-username">@{username}</span>}
+        {/* Баланс — только реальные деньги */}
+        <div className="header-balance">
+          <span className="header-logo">🏠 Nekit Casino</span>
+          {username && <span className="header-username">@{username}</span>}
         </div>
-        <div className="tma-header-right">
-          <div className="tma-session-earn">
-            <Coins size={12} />
-            <span>+{snapshot.sessionEarnings} ₽</span>
-          </div>
-          <div className="tma-lives">
-            {[0, 1, 2].map(i => (
-              <Heart
-                key={i}
-                className={`tma-heart${i >= snapshot.lives ? ' lost' : ''}`}
-                size={14}
-                fill="currentColor"
-              />
-            ))}
-          </div>
+
+        <div className="header-right">
+          {/* Банк — визуальный, не реальный баланс */}
+          {pendingWin > 0 && !isOver && (
+            <button className="header-bank-btn" onClick={collectWin} disabled={gameActive}
+              title={gameActive ? 'Закончи раунд' : 'Забрать выигрыш'}>
+              <span className="header-bank-amount">+{pendingWin.toLocaleString('ru')} ₽</span>
+              {!gameActive && <span className="header-bank-collect">ЗАБРАТЬ</span>}
+            </button>
+          )}
+
+          {/* 1 жизнь */}
+          <Heart className={`tma-heart${snapshot.lives <= 0 ? ' lost' : ''}`} size={16} fill="currentColor"/>
+
           {!isReady && !isOver && (
             <button className="tma-restart-btn" onClick={restartGame} aria-label="Заново">
-              <RotateCcw size={13} />
+              <RotateCcw size={13}/>
             </button>
           )}
         </div>
       </header>
 
-      {/* ── Stage ── */}
-      <div
-        ref={stageWrapRef}
-        className="tma-stage-wrap"
-        role="button"
-        tabIndex={0}
-        aria-label={isMoving ? 'Нажмите чтобы поставить домик' : 'Игровое поле'}
-        onClick={handleStagePress}
-      >
-        {/* stage-art — абсолютный, занимает весь wrap */}
+      {/* ── Игровое поле ── */}
+      <div ref={stageRef} className="tma-stage-wrap"
+        role="button" tabIndex={0}
+        onClick={() => { if (isMoving) dropHouse(); }}>
         <div className="stage-art">
-
-          {/* stage-scaler — виртуальный 440×720, масштабирован через CSS var */}
           <div className="stage-scaler">
-
-            {/* sky + world фиксированы, camera двигает stage-world */}
-            <div className="sky" />
-
-            <div
-              className="stage-world"
-              style={{ transform: `translate3d(0, ${snapshot.cameraOffset}px, 0)` }}
-            >
-              <span className="cloud cloud-one" />
-              <span className="cloud cloud-two" />
-              <span className="cloud cloud-three" />
-              <span className="hill hill-left" />
-              <span className="hill hill-right" />
-              <div className="ground" />
+            <div className="sky"/>
+            <div className="stage-world"
+              style={{ transform: `translate3d(0,${snapshot.cameraOffset}px,0)` }}>
+              <span className="cloud cloud-one"/><span className="cloud cloud-two"/><span className="cloud cloud-three"/>
+              <span className="hill hill-left"/><span className="hill hill-right"/>
+              <div className="ground"/>
               <div className="stage-houses">
-                {snapshot.houses.map(h => <HouseDrawing key={h.id} house={h} />)}
-                {snapshot.activeHouse && <HouseDrawing house={snapshot.activeHouse} />}
+                {snapshot.houses.map(h => <HouseDrawing key={h.id} house={h}/>)}
+                {snapshot.activeHouse && <HouseDrawing house={snapshot.activeHouse}/>}
               </div>
             </div>
 
-            {/* UI поверх — внутри scaler, чтобы масштабировались вместе */}
             <div className="live-pill">
-              <span className="live-dot" />
+              <span className="live-dot"/>
               {isMoving ? 'Ваш ход' : isReady ? 'Готов' : isOver ? 'Раунд завершён' : 'Приземляется...'}
             </div>
 
+            {/* ── Экран СТАРТА ── */}
             {isReady && (
               <div className="tma-overlay">
-                <p className="tma-overlay-kicker">Добро пожаловать</p>
+                <p className="tma-overlay-kicker">Башня домиков</p>
                 <h2 className="tma-overlay-title">Построим башню?</h2>
                 <p className="tma-overlay-sub">
                   {activeBet > 0
                     ? `Ставка ${activeBet} ₽ · ×${multiplier} за домик`
-                    : 'Сделай ставку снизу, чтобы зарабатывать'}
+                    : balance === 0
+                    ? '👑 Попроси админа пополнить баланс'
+                    : 'Сделай ставку снизу · 1 попытка'}
                 </p>
                 <button className="tma-play-btn" onClick={e => { e.stopPropagation(); startGame(); }}>
-                  <Sparkles size={16} /> Начать
+                  <Sparkles size={16}/> Начать
                 </button>
               </div>
             )}
 
+            {/* ── Экран КОНЦА ── */}
             {isOver && (
               <div className="tma-overlay">
-                <p className="tma-overlay-kicker">Башня упала</p>
+                <p className="tma-overlay-kicker">💀 Башня упала</p>
                 <h2 className="tma-overlay-title">
-                  {snapshot.placedCount} домик
-                  {snapshot.placedCount === 1 ? '' : snapshot.placedCount < 5 ? 'а' : 'ов'}
+                  {snapshot.placedCount} домик{snapshot.placedCount === 1 ? '' : snapshot.placedCount < 5 ? 'а' : 'ов'}
                 </h2>
-                <p className="tma-overlay-sub">+{snapshot.sessionEarnings} ₽ за раунд</p>
-                <button className="tma-play-btn" onClick={e => { e.stopPropagation(); restartGame(); }}>
-                  <RotateCcw size={15} /> Играть снова
-                </button>
+
+                {pendingWin > 0 ? (
+                  <>
+                    <div className="gameover-bank">
+                      <div className="gameover-bank-label">Твой банк</div>
+                      <div className="gameover-bank-amount">{pendingWin.toLocaleString('ru')} ₽</div>
+                      <div className="gameover-bank-note">Ещё не на балансе</div>
+                    </div>
+                    <button className="bank-collect-btn-big"
+                      onClick={e => { e.stopPropagation(); collectWin(); }}>
+                      💰 Забрать на баланс
+                    </button>
+                    <button className="tma-play-btn secondary"
+                      onClick={e => { e.stopPropagation(); restartGame(); }}>
+                      <RotateCcw size={14}/> Играть снова
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p className="tma-overlay-sub">Ставка {activeBet > 0 ? activeBet : ''} ₽ сгорела</p>
+                    <button className="tma-play-btn" onClick={e => { e.stopPropagation(); restartGame(); }}>
+                      <RotateCcw size={15}/> Играть снова
+                    </button>
+                  </>
+                )}
               </div>
             )}
 
             {isMoving && (
               <button className="tma-drop-btn" onClick={e => { e.stopPropagation(); dropHouse(); }}>
-                <MousePointer2 size={14} /> Поставить
+                <MousePointer2 size={14}/> Поставить
               </button>
             )}
 
@@ -359,25 +300,18 @@ function App() {
               </div>
             )}
 
-          </div>{/* /stage-scaler */}
-        </div>{/* /stage-art */}
+          </div>
+        </div>
       </div>
 
-      {/* ── Bet Panel ── */}
+      {/* ── Панель ставки ── */}
       <BetPanel
-        balance={balance}
-        activeBet={activeBet}
-        betInput={betInput}
-        multiplier={multiplier}
-        rewardPerHouse={snapshot.rewardPerHouse}
-        gameActive={gameActive}
-        onBet={placeBet}
-        onCancel={cancelBet}
+        balance={balance} activeBet={activeBet} betInput={betInput}
+        multiplier={multiplier} rewardPerHouse={snapshot.rewardPerHouse}
+        gameActive={gameActive} onBet={placeBet} onCancel={cancelBet}
         onChangeBetInput={setBetInput}
       />
 
     </div>
   );
 }
-
-export default App;

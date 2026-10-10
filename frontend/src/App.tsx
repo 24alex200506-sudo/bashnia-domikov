@@ -306,7 +306,7 @@ export default function App() {
 
           <div className="ground-road" />
 
-          {/* Башня домиков */}
+          {/* Башня домиков + летящий домик (физика) */}
           <div className="stage-world" style={{ transform: `translate3d(0,${snapshot.cameraOffset}px,0)` }}>
             <div className="stage-houses">
               {snapshot.houses.map((h) => (
@@ -316,39 +316,32 @@ export default function App() {
                   isNew={h.id === lastDroppedId} />
               ))}
             </div>
-          </div>
 
-          {/* Летящий домик — CSS анимация сверху вниз */}
-          {snapshot.fallingHouse && (() => {
-            const fh = snapshot.fallingHouse!;
-            const targetX = ((fh.x - fh.width / 2) / 440) * 100;
-            const targetY = ((fh.y - fh.height / 2 + snapshot.cameraOffset) / 720) * 100;
-            const w = (fh.width / 440) * 100;
-            const h = (fh.height / 720) * 100;
-            return (
-              <div key={`fall-${lastDroppedId}`} style={{
+            {/* Летящий домик — живёт в той же системе координат что и башня */}
+            {snapshot.fallingHouse && (
+              <div style={{
                 position: 'absolute',
-                left: `${targetX}%`,
-                top: `${targetY}%`,
-                width: `${w}%`,
-                height: `${h}%`,
+                left:   `${((snapshot.fallingHouse.x - snapshot.fallingHouse.width  / 2) / 440) * 100}%`,
+                top:    `${((snapshot.fallingHouse.y - snapshot.fallingHouse.height / 2) / 720) * 100}%`,
+                width:  `${(snapshot.fallingHouse.width  / 440) * 100}%`,
+                height: `${(snapshot.fallingHouse.height / 720) * 100}%`,
+                transform: `rotate(${snapshot.fallingHouse.angle}rad)`,
                 zIndex: 7,
-                '--body': fh.bodyColor,
-                '--roof': fh.roofColor,
-                '--trim': fh.trimColor,
-                animation: 'fall-in 0.6s cubic-bezier(.25,1.4,.4,1) both',
-                transformOrigin: 'center bottom',
-                filter: 'drop-shadow(0 6px 12px rgba(0,0,0,.5))',
+                '--body': snapshot.fallingHouse.bodyColor,
+                '--roof': snapshot.fallingHouse.roofColor,
+                '--trim': snapshot.fallingHouse.trimColor,
+                filter: 'drop-shadow(0 6px 16px rgba(0,0,0,.5))',
+                transformOrigin: 'center center',
               } as CSSProperties}>
                 <div className="house-roof" />
-                <div className="house-body" style={{ backgroundColor: fh.bodyColor }}>
+                <div className="house-body" style={{ backgroundColor: snapshot.fallingHouse.bodyColor }}>
                   <span className="house-window" style={{ left: '17%' }} />
                   <span className="house-window" style={{ left: '66%' }} />
                 </div>
                 <div className="house-trim" />
               </div>
-            );
-          })()}
+            )}
+          </div>
 
           {/* Домик на цепи — по центру, качается */}
           {snapshot.activeHouse && (
@@ -420,19 +413,17 @@ export default function App() {
       {/* ── Нижняя панель ── */}
       <div className="bottom-bar">
         {isMoving ? (
-          /* Во время игры — СТРОЙ + ЗАБРАТЬ */
           <div className="bottom-game-row">
+            <button className="bottom-build-btn" onClick={dropHouse}>
+              <span className="bottom-build-text">СТРОЙ</span>
+              {activeBet > 0 && <span className="bottom-build-sub">+{snapshot.rewardPerHouse} ₽ за домик</span>}
+            </button>
             {pendingWin > 0 && (
               <button className="bottom-collect-btn" onClick={collectWin}>
                 <span className="bottom-collect-amount">+{pendingWin.toLocaleString('ru')} ₽</span>
                 <span className="bottom-collect-label">ЗАБРАТЬ</span>
               </button>
             )}
-            <button className="bottom-build-btn" onClick={dropHouse}>
-              <span className="bottom-build-icon">🏗️</span>
-              <span className="bottom-build-text">СТРОЙ</span>
-              {activeBet > 0 && <span className="bottom-build-mult">+{snapshot.rewardPerHouse} ₽</span>}
-            </button>
           </div>
         ) : activeBet > 0 ? (
           <div className="bottom-active-bet">

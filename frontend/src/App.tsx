@@ -1,4 +1,4 @@
-﻿import type { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTowerGame } from './game/useTowerGame';
 import { useBalance, getBetMultiplier } from './game/useBalance';
@@ -81,7 +81,7 @@ export default function App() {
     <div className="tma-shell">
       <header className="tma-header">
         <div className="header-left">{username&&<span className="header-username">@{username}</span>}</div>
-        <span className="header-logo">🏠 Nekit Casino</span>
+        <span className="header-logo">Nekit Casino</span>
         <div className="header-right">
           {pendingWin>0&&!isOver&&(
             <button className="header-bank-btn" onClick={collectWin} disabled={gameActive}>

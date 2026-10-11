@@ -121,7 +121,7 @@ export function useTowerGame(
 
   const setupWorld = useCallback(() => {
     const engine = Engine.create({ enableSleeping: true });
-    engine.gravity.y = 1.12; engine.gravity.scale = 0.0005;
+    engine.gravity.y = 1.12; engine.gravity.scale = 0.001;
     const ground = Bodies.rectangle(WIDTH / 2, GROUND_Y + 23, WIDTH * 3, 46, { isStatic: true, friction: 0.96, label: 'ground' });
     World.add(engine.world, ground);
     let y = GROUND_Y;

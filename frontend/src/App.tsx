@@ -325,7 +325,6 @@ export default function App() {
                 top:    `${((snapshot.fallingHouse.y - snapshot.fallingHouse.height / 2) / 720) * 100}%`,
                 width:  `${(snapshot.fallingHouse.width  / 440) * 100}%`,
                 height: `${(snapshot.fallingHouse.height / 720) * 100}%`,
-                transform: `rotate(${snapshot.fallingHouse.angle}rad)`,
                 zIndex: 7,
                 '--body': snapshot.fallingHouse.bodyColor,
                 '--roof': snapshot.fallingHouse.roofColor,
@@ -412,11 +411,12 @@ export default function App() {
 
       {/* ── Нижняя панель ── */}
       <div className="bottom-bar">
-        {isMoving ? (
+        {isMoving && activeBet > 0 ? (
+          /* Игра идёт И есть ставка — показываем BUILD */
           <div className="bottom-game-row">
             <button className="bottom-build-btn" onClick={dropHouse}>
-              <span className="bottom-build-text">СТРОЙ</span>
-              {activeBet > 0 && <span className="bottom-build-sub">+{snapshot.rewardPerHouse} ₽ per house</span>}
+              <span className="bottom-build-text">BUILD</span>
+              <span className="bottom-build-sub">+{snapshot.rewardPerHouse} ₽ per house</span>
             </button>
             {pendingWin > 0 && (
               <button className="bottom-collect-btn" onClick={collectWin}>
@@ -425,7 +425,13 @@ export default function App() {
               </button>
             )}
           </div>
+        ) : isMoving && activeBet === 0 ? (
+          /* Игра идёт но нет ставки — кнопка ставки */
+          <button className="bottom-place-btn" onClick={() => setShowModal(true)}>
+            <Coins size={18} /> СДЕЛАТЬ СТАВКУ
+          </button>
         ) : (
+          /* Не в игре — кнопка ставки */
           <button className="bottom-place-btn" onClick={() => setShowModal(true)}>
             <Coins size={18} /> СДЕЛАТЬ СТАВКУ
           </button>

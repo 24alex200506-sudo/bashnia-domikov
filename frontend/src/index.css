@@ -353,10 +353,6 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 }
 
 /* Кнопка СДЕЛАТЬ СТАВКУ */
-  color: #3a2000;
-  letter-spacing: .08em;
-  line-height: 1;
-}
 .bottom-build-mult {
   font-size: 11px;
   font-weight: 800;

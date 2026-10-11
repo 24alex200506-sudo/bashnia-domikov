@@ -203,8 +203,8 @@ export function useTowerGame(
       const newestHouse = isSettling && housesRef.current.length > 0
         ? housesRef.current[housesRef.current.length - 1]
         : null;
-      // Показываем пока он движется (не статический и dropAge < 4000мс)
-      const fallingHouse = (newestHouse && !newestHouse.body.isStatic && dropAgeRef.current < 4000)
+      // Показываем пока он движется ИЛИ dropAge < 2000мс (чтобы видеть анимацию)
+      const fallingHouse = (newestHouse && dropAgeRef.current < 2500)
         ? snapshotHouse(newestHouse)
         : null;
       setSnapshot({

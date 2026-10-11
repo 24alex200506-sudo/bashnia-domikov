@@ -37,7 +37,6 @@ export default function Menu() {
           {photoUrl
             ? <img src={photoUrl} alt={displayName} />
             : <span>{displayName.slice(0,1).toUpperCase()}</span>}
-          <div className="m-avatar-ring" />
           <div className="m-avatar-online" />
         </div>
       </div>
@@ -185,10 +184,7 @@ export default function Menu() {
         </button>
       </div>
 
-      {/* Нижний баннер */}
-      <div className="m-footer-banner">
-        <span>🎁 Первые 100 ₽ — бесплатно новым игрокам</span>
-      </div>
+      {/* Нижний баннер убран */}
     </div>
   );
 }

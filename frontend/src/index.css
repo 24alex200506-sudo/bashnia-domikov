@@ -1028,3 +1028,121 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   text-align:center; position:relative; z-index:2;
   backdrop-filter:blur(8px);
 }
+
+/* ── Карточка в стиле "Чёрная рулетка" ── */
+.m-card-bg {
+  background: linear-gradient(135deg, #1a0a2e 0%, #2d1044 50%, #1a0a2e 100%) !important;
+}
+.m-card {
+  border: 2px solid transparent !important;
+  background: linear-gradient(#1a0a2e, #2d1044) padding-box,
+              linear-gradient(135deg, #ff66b3, #cc44ff, #7722ff) border-box !important;
+  box-shadow: 0 0 24px rgba(200,50,255,.35), 0 8px 32px rgba(0,0,0,.6) !important;
+}
+
+/* Персонаж — домик-талисман */
+.m-card-character {
+  width: 120px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  flex: none;
+}
+.m-char-house {
+  position: relative;
+  filter: drop-shadow(0 4px 16px rgba(255,200,0,.5));
+}
+.m-char-roof {
+  width: 0; height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 36px solid #f5a623;
+  filter: brightness(1.1);
+  margin-bottom: -2px;
+  position: relative;
+  z-index: 1;
+}
+.m-char-roof::after {
+  content: '';
+  position: absolute;
+  top: 8px; left: -28px;
+  width: 0; height: 0;
+  border-left: 28px solid transparent;
+  border-right: 28px solid transparent;
+  border-bottom: 26px solid rgba(255,255,255,.15);
+}
+.m-char-wall {
+  width: 68px;
+  height: 56px;
+  background: linear-gradient(180deg, #ffc107, #e6950a);
+  border-radius: 3px 3px 5px 5px;
+  position: relative;
+  box-shadow: inset -8px 0 rgba(0,0,0,.2), inset 0 -4px rgba(0,0,0,.1);
+  border: 2px solid rgba(255,255,255,.2);
+}
+.m-char-window {
+  position: absolute;
+  top: 10px;
+  width: 14px; height: 14px;
+  background: linear-gradient(135deg, #b8e4f0, #7dc8e8);
+  border: 1.5px solid rgba(0,0,0,.2);
+  border-radius: 2px;
+  box-shadow: inset 1px 1px rgba(255,255,255,.6);
+}
+.m-char-window:first-child { left: 8px; }
+.m-char-window:nth-child(2) { right: 8px; }
+.m-char-door {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 18px; height: 28px;
+  background: linear-gradient(180deg, #8B4513, #5c2d0a);
+  border-radius: 3px 3px 0 0;
+  border: 1.5px solid rgba(0,0,0,.3);
+}
+.m-char-coin {
+  position: absolute;
+  font-size: 18px;
+  animation: coin-float 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(255,200,0,.6));
+}
+.m-char-coin--1 { top: -8px; right: -16px; animation-delay: 0s; }
+.m-char-coin--2 { bottom: 8px; right: -20px; animation-delay: .7s; font-size: 14px; opacity: .8; }
+@keyframes coin-float {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50%      { transform: translateY(-6px) rotate(5deg); }
+}
+
+/* Текст на тёмной карточке */
+.m-card-title {
+  font-family: 'Oswald', sans-serif !important;
+  font-size: 34px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  font-style: italic;
+  letter-spacing: .08em !important;
+  text-shadow: 0 0 20px rgba(200,100,255,.7), 2px 2px 0 rgba(0,0,0,.4) !important;
+}
+.m-card-desc {
+  color: rgba(220,160,255,.75) !important;
+  font-style: italic;
+  font-size: 13px !important;
+}
+.m-card-play {
+  background: rgba(180,50,255,.25) !important;
+  border-color: rgba(200,80,255,.5) !important;
+  box-shadow: 0 0 12px rgba(180,50,255,.4) !important;
+}
+
+/* Фиолетовые иконки в фоне */
+.m-card::after {
+  content: '💲 💲 💲';
+  position: absolute;
+  right: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 28px;
+  opacity: .06;
+  letter-spacing: 8px;
+  pointer-events: none;
+  z-index: 1;
+}

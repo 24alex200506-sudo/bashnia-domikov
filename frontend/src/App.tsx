@@ -399,7 +399,7 @@ export default function App() {
             </div>
           )}
 
-          {/* Кнопка СТРОЙ убрана отсюда — теперь в нижней панели */}
+          {/* Кнопка BUILD убрана отсюда — теперь в нижней панели */}
 
           {snapshot.lastAward !== null && isMoving && (
             <div className="award-pop" key={`${snapshot.placedCount}-${snapshot.lastAward}`}>
@@ -416,7 +416,7 @@ export default function App() {
           <div className="bottom-game-row">
             <button className="bottom-build-btn" onClick={dropHouse}>
               <span className="bottom-build-text">СТРОЙ</span>
-              {activeBet > 0 && <span className="bottom-build-sub">+{snapshot.rewardPerHouse} ₽ за домик</span>}
+              {activeBet > 0 && <span className="bottom-build-sub">+{snapshot.rewardPerHouse} ₽ per house</span>}
             </button>
             {pendingWin > 0 && (
               <button className="bottom-collect-btn" onClick={collectWin}>

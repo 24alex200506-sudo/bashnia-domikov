@@ -198,13 +198,13 @@ export function useTowerGame(
 
     const publish = () => {
       const v = valuesRef.current;
-      // fallingHouse — последний домик пока он не стал статическим
+      // fallingHouse — показываем только пока домик реально движется
       const isSettling = statusRef.current === 'settling';
       const newestHouse = isSettling && housesRef.current.length > 0
         ? housesRef.current[housesRef.current.length - 1]
         : null;
-      // Показываем пока он движется ИЛИ dropAge < 2000мс (чтобы видеть анимацию)
-      const fallingHouse = (newestHouse && dropAgeRef.current < 2500)
+      // Показываем только если домик не статический (ещё в воздухе)
+      const fallingHouse = (newestHouse && !newestHouse.body.isStatic)
         ? snapshotHouse(newestHouse)
         : null;
       setSnapshot({

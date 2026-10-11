@@ -517,3 +517,199 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   88%  { transform: translateY(-6px) rotate(0deg) scale(.97); }
   100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
 }
+
+/* ══════════════════════════════════════
+   MENU
+══════════════════════════════════════ */
+.menu-shell {
+  min-height: 100%;
+  background: linear-gradient(160deg, #0f0c29, #1a1040, #24243e);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Nunito', sans-serif;
+  color: #fff;
+  overflow: hidden;
+}
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 10px;
+}
+.menu-logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  background: linear-gradient(135deg, #fff, #ffe066);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 6px rgba(255,209,102,.4));
+}
+.menu-tag {
+  font-size: 11px;
+  font-weight: 900;
+  color: rgba(255,255,255,.4);
+  letter-spacing: .15em;
+  background: rgba(255,255,255,.07);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.menu-content {
+  flex: 1;
+  padding: 16px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Карточка игры ── */
+.game-card {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5a623 0%, #f7c35f 40%, #e8850a 100%);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0;
+  box-shadow:
+    0 8px 32px rgba(245,166,35,.4),
+    0 2px 0 rgba(255,255,255,.15) inset,
+    0 -3px 0 rgba(0,0,0,.2) inset;
+  transition: transform .15s, box-shadow .15s;
+  min-height: 110px;
+}
+.game-card:hover  { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(245,166,35,.5); }
+.game-card:active { transform: translateY(1px);  box-shadow: 0 4px 16px rgba(245,166,35,.3); }
+
+/* Badge HOT */
+.card-badge {
+  position: absolute;
+  top: 12px; left: 14px;
+  background: rgba(255,255,255,.25);
+  backdrop-filter: blur(4px);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: .05em;
+  z-index: 2;
+}
+
+/* Превью */
+.card-preview {
+  width: 160px;
+  min-height: 110px;
+  position: relative;
+  flex: none;
+  overflow: hidden;
+}
+.card-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #87ceeb, #c4e9ef 60%, #e6f1d9);
+}
+.card-sun {
+  position: absolute;
+  top: 10px; right: 12px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff9c4, #ffd700 60%, #ff8c00);
+  box-shadow: 0 0 16px 6px rgba(255,200,0,.4);
+}
+.card-cloud {
+  position: absolute;
+  top: 18px; left: 10px;
+  width: 40px; height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.8);
+}
+.card-cloud::before {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 6px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: inherit;
+}
+.card-tower {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.card-house {
+  height: 20px;
+  border-radius: 3px 3px 2px 2px;
+  position: relative;
+  flex-shrink: 0;
+}
+.card-house::before {
+  content: '';
+  position: absolute;
+  top: -9px; left: -4px; right: -4px;
+  height: 12px;
+  background: var(--roof, #c95f8d);
+  border-radius: 3px 3px 0 0;
+}
+.card-house--base {
+  height: 22px;
+}
+
+/* Мультипликаторы на превью */
+.card-mult {
+  position: absolute;
+  font-size: 13px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,.6);
+  background: rgba(0,0,0,.25);
+  border-radius: 8px;
+  padding: 2px 6px;
+}
+.card-mult--1 { top: 50%; right: 8px; transform: translateY(-50%); font-size: 11px; opacity: .7; }
+.card-mult--2 { top: 30%; right: 4px; }
+.card-mult--3 { top: 12%; right: 10px; font-size: 15px; }
+
+/* Название */
+.card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 8px 0 20px;
+  gap: 4px;
+}
+.card-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .04em;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+.card-sub {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,.7);
+}
+
+/* Стрелка */
+.card-arrow {
+  padding: 0 18px 0 8px;
+  font-size: 20px;
+  color: rgba(255,255,255,.8);
+  flex: none;
+}

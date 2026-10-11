@@ -45,7 +45,34 @@ export default function Menu() {
       {/* Логотип */}
       <div className="m-hero">
         <div className="m-logo-wrap">
-          <span className="m-logo-icon">🎰</span>
+          <div className="m-logo-icon-wrap">
+            {/* Игральные кости — красивая 3D иконка казино */}
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="8" width="24" height="24" rx="5" fill="url(#dice1)" stroke="rgba(255,255,255,0.3)" strokeWidth="1"/>
+              <rect x="16" y="14" width="24" height="24" rx="5" fill="url(#dice2)" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
+              {/* Точки на первом кубике */}
+              <circle cx="9" cy="15" r="2.2" fill="white" opacity="0.9"/>
+              <circle cx="17" cy="15" r="2.2" fill="white" opacity="0.9"/>
+              <circle cx="9" cy="20" r="2.2" fill="white" opacity="0.9"/>
+              <circle cx="17" cy="20" r="2.2" fill="white" opacity="0.9"/>
+              <circle cx="9" cy="25" r="2.2" fill="white" opacity="0.9"/>
+              <circle cx="17" cy="25" r="2.2" fill="white" opacity="0.9"/>
+              {/* Точки на втором кубике */}
+              <circle cx="28" cy="28" r="2" fill="white" opacity="0.85"/>
+              <circle cx="34" cy="28" r="2" fill="white" opacity="0.85"/>
+              <circle cx="31" cy="31" r="2" fill="white" opacity="0.85"/>
+              <defs>
+                <linearGradient id="dice1" x1="2" y1="8" x2="26" y2="32" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#7b2ff7"/>
+                  <stop offset="100%" stopColor="#4a00c8"/>
+                </linearGradient>
+                <linearGradient id="dice2" x1="16" y1="14" x2="40" y2="38" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#ff6b6b"/>
+                  <stop offset="100%" stopColor="#c0392b"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
           <div>
             <div className="m-logo-title">Nekit Casino</div>
             <div className="m-logo-sub">Play · Win · Collect</div>
@@ -93,11 +120,6 @@ export default function Menu() {
           <div className="m-card-body">
             <div className="m-card-title">TOWER</div>
             <div className="m-card-desc">Build & Earn</div>
-            <div className="m-card-stats">
-              <span className="m-stat">⚡ Fast</span>
-              <span className="m-stat">💎 ×12</span>
-              <span className="m-stat">🏆 Top</span>
-            </div>
           </div>
 
           {/* Кнопка Play */}

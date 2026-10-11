@@ -1,53 +1,67 @@
 import { useState } from 'react';
 import App from './App';
+import { useBalance } from './game/useBalance';
 
 export default function Menu() {
   const [inGame, setInGame] = useState(false);
+  const { balance, username } = useBalance();
 
   if (inGame) return <App />;
 
   return (
     <div className="menu-shell">
-      {/* Header */}
-      <div className="menu-header">
-        <span className="menu-logo">🎰 Nekit Casino</span>
-        <span className="menu-tag">DEMO</span>
+
+      {/* ── Топ-бар: баланс + Пополнить + аватар ── */}
+      <div className="menu-topbar">
+        {/* Баланс */}
+        <div className="menu-balance-pill">
+          <span className="menu-balance-icon">₽</span>
+          <span className="menu-balance-val">{balance.toLocaleString('ru', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+          <span className="menu-balance-arrow">▾</span>
+        </div>
+
+        {/* Кнопка Пополнить */}
+        <button className="menu-topup-btn">
+          Пополнить
+        </button>
+
+        {/* Аватар */}
+        <div className="menu-avatar">
+          <span className="menu-avatar-emoji">🧙</span>
+          <span className="menu-avatar-dot" />
+        </div>
       </div>
 
-      {/* Game card */}
+      {/* ── Логотип ── */}
+      <div className="menu-logo-row">
+        <span className="menu-logo">🎰 Nekit Casino</span>
+      </div>
+
+      {/* ── Карточка игры ── */}
       <div className="menu-content">
         <button className="game-card" onClick={() => setInGame(true)}>
-          {/* Badge */}
           <span className="card-badge">🔥 HOT</span>
 
-          {/* Preview — мини башня из домиков */}
           <div className="card-preview">
-            {/* Небо */}
             <div className="card-sky" />
-            {/* Солнце */}
             <div className="card-sun" />
-            {/* Облако */}
             <div className="card-cloud" />
-            {/* Башня домиков */}
             <div className="card-tower">
               <div className="card-house" style={{ background: '#ef8bb4', width: 54, '--roof': '#c95f8d' } as React.CSSProperties} />
               <div className="card-house" style={{ background: '#6bc8be', width: 62, '--roof': '#338f91' } as React.CSSProperties} />
               <div className="card-house" style={{ background: '#f5c66e', width: 70, '--roof': '#e18d49' } as React.CSSProperties} />
               <div className="card-house card-house--base" style={{ background: '#68a9dd', width: 80, '--roof': '#3978b8' } as React.CSSProperties} />
             </div>
-            {/* Мультипликаторы */}
             <span className="card-mult card-mult--1">×2.5</span>
             <span className="card-mult card-mult--2">×5.0</span>
             <span className="card-mult card-mult--3">×12</span>
           </div>
 
-          {/* Info */}
           <div className="card-info">
             <span className="card-title">TOWER</span>
             <span className="card-sub">Build & Earn</span>
           </div>
 
-          {/* Arrow */}
           <div className="card-arrow">▶</div>
         </button>
       </div>

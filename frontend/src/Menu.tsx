@@ -96,23 +96,18 @@ export default function Menu() {
             <span className="m-badge m-badge--new">×12 MAX</span>
           </div>
 
-          {/* Превью — 3D башня */}
-          <div className="m-card-preview">
-            <div className="m-prev-sky" />
-            <div className="m-prev-sun" />
-            <div className="m-prev-cloud m-prev-cloud--1" />
-            <div className="m-prev-cloud m-prev-cloud--2" />
-            {/* Башня */}
-            <div className="m-prev-tower">
-              <div className="m-prev-house" style={{ width: 48, background: '#ef8bb4', '--r': '#c95f8d' } as React.CSSProperties} />
-              <div className="m-prev-house" style={{ width: 58, background: '#6bc8be', '--r': '#338f91' } as React.CSSProperties} />
-              <div className="m-prev-house" style={{ width: 68, background: '#f5c66e', '--r': '#e18d49' } as React.CSSProperties} />
-              <div className="m-prev-house" style={{ width: 78, background: '#9b8de4', '--r': '#6959b8' } as React.CSSProperties} />
-            </div>
-            {/* Домик на цепи */}
-            <div className="m-prev-crane">
-              <div className="m-prev-chain" />
-              <div className="m-prev-falling-house" style={{ background: '#83c879', '--r': '#4f9d6f' } as React.CSSProperties} />
+          {/* Персонаж — домик 3D */}
+          <div className="m-card-character">
+            <div className="m-char-house">
+              <div className="m-char-roof" />
+              <div className="m-char-wall">
+                <div className="m-char-window" />
+                <div className="m-char-window" />
+                <div className="m-char-door" />
+              </div>
+              {/* Монеты вокруг */}
+              <div className="m-char-coin m-char-coin--1">💰</div>
+              <div className="m-char-coin m-char-coin--2">💰</div>
             </div>
           </div>
 

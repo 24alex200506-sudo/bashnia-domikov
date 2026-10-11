@@ -713,3 +713,89 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   color: rgba(255,255,255,.8);
   flex: none;
 }
+
+/* ── Menu top bar ── */
+.menu-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px 6px;
+  justify-content: flex-start;
+}
+
+/* Пилюля баланса */
+.menu-balance-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.menu-balance-pill:hover { background: rgba(255,255,255,.13); }
+.menu-balance-icon {
+  font-size: 13px;
+  font-weight: 900;
+  color: #00b4ff;
+  background: rgba(0,180,255,.18);
+  border-radius: 50%;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.menu-balance-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.01em;
+}
+.menu-balance-arrow {
+  font-size: 11px;
+  color: rgba(255,255,255,.45);
+  margin-left: 2px;
+}
+
+/* Кнопка Пополнить */
+.menu-topup-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1a7fd4, #0d5fa0);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: .01em;
+  box-shadow: 0 3px 12px rgba(26,127,212,.45);
+  transition: transform .12s, box-shadow .12s;
+}
+.menu-topup-btn:hover  { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(26,127,212,.55); }
+.menu-topup-btn:active { transform: translateY(1px); }
+
+/* Аватар */
+.menu-avatar {
+  margin-left: auto;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2a1f6e, #1a1040);
+  border: 2px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+}
+.menu-avatar-dot {
+  position: absolute;
+  bottom: 1px; right: 1px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #3ddc84;
+  border: 2px solid #0f0c29;
+}
+
+.menu-logo-row {
+  padding: 4px 16px 8px;
+}

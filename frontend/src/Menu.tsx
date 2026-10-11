@@ -2,32 +2,59 @@ import { useState } from 'react';
 import App from './App';
 import { useBalance } from './game/useBalance';
 
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp?: {
+        initDataUnsafe?: {
+          user?: {
+            id?: number;
+            username?: string;
+            first_name?: string;
+            photo_url?: string;
+          };
+        };
+      };
+    };
+  }
+}
+
 export default function Menu() {
   const [inGame, setInGame] = useState(false);
-  const { balance, username } = useBalance();
+  const { balance } = useBalance();
+
+  const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  const photoUrl = user?.photo_url;
+  const displayName = user?.username || user?.first_name || 'Игрок';
 
   if (inGame) return <App />;
 
   return (
     <div className="menu-shell">
 
-      {/* ── Топ-бар: баланс + Пополнить + аватар ── */}
+      {/* ── Топ-бар ── */}
       <div className="menu-topbar">
         {/* Баланс */}
         <div className="menu-balance-pill">
           <span className="menu-balance-icon">₽</span>
-          <span className="menu-balance-val">{balance.toLocaleString('ru', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+          <span className="menu-balance-val">
+            {balance.toLocaleString('ru', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </span>
           <span className="menu-balance-arrow">▾</span>
         </div>
 
         {/* Кнопка Пополнить */}
-        <button className="menu-topup-btn">
-          Пополнить
-        </button>
+        <button className="menu-topup-btn">Пополнить</button>
 
-        {/* Аватар */}
+        {/* Аватар из Telegram */}
         <div className="menu-avatar">
-          <span className="menu-avatar-emoji">🧙</span>
+          {photoUrl ? (
+            <img src={photoUrl} alt={displayName} className="menu-avatar-img" />
+          ) : (
+            <span className="menu-avatar-initials">
+              {displayName.slice(0, 1).toUpperCase()}
+            </span>
+          )}
           <span className="menu-avatar-dot" />
         </div>
       </div>
@@ -37,7 +64,7 @@ export default function Menu() {
         <span className="menu-logo">🎰 Nekit Casino</span>
       </div>
 
-      {/* ── Карточка игры ── */}
+      {/* ── Карточка TOWER ── */}
       <div className="menu-content">
         <button className="game-card" onClick={() => setInGame(true)}>
           <span className="card-badge">🔥 HOT</span>

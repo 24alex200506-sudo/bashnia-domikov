@@ -47,7 +47,8 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 /* Stage */
 .tma-stage-wrap { flex:1 1 0; min-height:0; position:relative; overflow:hidden; width:100%; max-width:440px; align-self:center; touch-action:manipulation; }
 .stage-art { position:absolute; inset:0; overflow:hidden; }
-.stage-scaler { position:absolute; width:440px; height:720px; top:50%; left:50%; transform:translate(-50%,-50%) scale(var(--stage-scale,1)); transform-origin:center center; overflow:hidden; }
+.stage-scaler { position:absolute; width:440px; height:720px; top:50%; left:50%; transform:translate(-50%,-50%) scale(var(--stage-scale,1)); transform-origin:center center; overflow:visible; }
+.stage-world { position:absolute; inset:0; z-index:1; will-change:transform; overflow:visible; }
 
 /* Sky background */
 .sky {
@@ -353,6 +354,10 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 }
 
 /* Кнопка СДЕЛАТЬ СТАВКУ */
+  color: #3a2000;
+  letter-spacing: .08em;
+  line-height: 1;
+}
 .bottom-build-mult {
   font-size: 11px;
   font-weight: 800;

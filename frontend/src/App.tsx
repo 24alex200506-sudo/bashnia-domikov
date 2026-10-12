@@ -309,7 +309,7 @@ export default function App() {
           {/* Башня домиков — включает летящий дом (он в housesRef) */}
           <div className="stage-world" style={{ transform: `translate3d(0,${snapshot.cameraOffset}px,0)` }}>
             <div className="stage-houses">
-              {snapshot.houses.map((h) => (
+              {snapshot.houses.filter(h => h.id >= 0).map((h) => (
                 <HouseDrawing
                   key={h.id === lastDroppedId ? `${h.id}-${dropTimestamp}` : h.id}
                   house={h}

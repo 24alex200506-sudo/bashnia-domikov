@@ -121,8 +121,8 @@ export function useTowerGame(
   const getReward = useCallback(() => Math.round(BASE_REWARD * getBetMultiplier(activeBetRef.current)), []);
 
   const setupWorld = useCallback(() => {
-    const engine = Engine.create({ enableSleeping: true, positionIterations: 10, velocityIterations: 8 });
-    engine.gravity.y = 1.0; engine.gravity.scale = 0.001;
+    const engine = Engine.create({ enableSleeping: true, positionIterations: 20, velocityIterations: 16 });
+    engine.gravity.y = 1.0; engine.gravity.scale = 0.0006;
     const ground = Bodies.rectangle(WIDTH / 2, GROUND_Y + 23, WIDTH * 3, 46, { isStatic: true, friction: 0.96, label: 'ground' });
     World.add(engine.world, ground);
     let y = GROUND_Y;
@@ -147,10 +147,8 @@ export function useTowerGame(
     const mini = placedSinceMiniRef.current >= miniIntervalRef.current;
     const w = mini ? Math.round(size.width  * 0.68) : size.width;
     const h = mini ? Math.round(size.height * 0.78) : size.height;
-    // Домик висит на цепи: hook=20px + chainLen + half height
-    // chainLen зависит от количества поставленных домиков
     const chainLen = Math.max(60, Math.min(200, 60 + valuesRef.current.placedCount * 8));
-    const craneY = 20 + chainLen + h * 0.9 / 2; // позиция центра домика на цепи в 720px координатах
+    const craneY = 20 + chainLen + h * 0.9 / 2;
     activeRef.current = {
       x: 220,
       y: craneY,
@@ -177,7 +175,8 @@ export function useTowerGame(
     const active = activeRef.current;
     const id = nextIdRef.current;
     // Всегда создаём домик по центру (x=220) — он качается визуально но падает по центру
-    const h = buildHouse(id, 220, active.y, active.width, active.height, false, active.mini);
+    const h = buildHouse(id, active.x, active.y, active.width, active.height, false, active.mini);
+    // Начальная скорость = 0, гравитация сделает всё сама
     Body.setVelocity(h.body, { x: 0, y: 0 });
     housesRef.current.push(h);
     World.add(engineRef.current.world, h.body);

@@ -69,9 +69,9 @@ interface HouseData {
 function buildHouse(id: number, x: number, y: number, w: number, h: number, isStatic = false, mini = false): HouseData {
   const color = colorFor(id);
   const body = Bodies.rectangle(x, y, w, h, {
-    isStatic, friction: 0.95, frictionStatic: 1.0,
-    restitution: 0.0, density: 0.004, slop: 0.05,
-    chamfer: { radius: 1 }, label: `house-${id}`,
+    isStatic, friction: 0.8, frictionStatic: 0.9,
+    restitution: 0.05, density: 0.006, slop: 0.05,
+    chamfer: { radius: 3 }, label: `house-${id}`,
   });
   return { id, width: w, height: h, bodyColor: color.body, roofColor: color.roof, trimColor: color.trim, windows: id % 3 === 1 ? 3 : 2, mini, body };
 }
@@ -121,14 +121,18 @@ export function useTowerGame(
 
   const setupWorld = useCallback(() => {
     const engine = Engine.create({ enableSleeping: true, positionIterations: 20, velocityIterations: 16 });
-    engine.gravity.y = 1.0; engine.gravity.scale = 0.0008;
+    engine.gravity.y = 1.0; engine.gravity.scale = 0.002;
     const ground = Bodies.rectangle(WIDTH / 2, GROUND_Y + 23, WIDTH * 3, 46, { isStatic: true, friction: 0.96, label: 'ground' });
     World.add(engine.world, ground);
-    // Базовое тело = синий Casino (140x88, bottom=90px → center y = 720-90-44 = 586)
-    const casinoY = 720 - 90 - 44; // = 586
-    housesRef.current = [{ width: 140, height: 88, x: 220 }].map((s, i) => {
-      return buildHouse(-3 + i, s.x, casinoY, s.width, s.height, true);
+    // Casino платформа — невидимая, на верхушке синего Casino
+    // Casino: bottom=90px от низа 720px → низ y=630, высота=88 → верх y=542, центр y=586
+    // Платформа шириной 140px (ширина Casino), центр x=220
+    const casinoPlatform = Bodies.rectangle(220, 586, 140, 88, {
+      isStatic: true, friction: 1.0, frictionStatic: 1.0, label: 'casino',
     });
+    World.add(engine.world, casinoPlatform);
+    // Базовый домик больше не нужен — Casino платформа заменяет его
+    housesRef.current = [];
     World.add(engine.world, housesRef.current.map(h => h.body));
     engineRef.current = engine; groundRef.current = ground;
     nextIdRef.current = 0; stableFramesRef.current = 0; dropAgeRef.current = 0;

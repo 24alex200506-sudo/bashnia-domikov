@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
 import { Bodies, Body, Engine, Query, Sleeping, World } from 'matter-js';
 import { getBetMultiplier } from './useBalance';
 
@@ -70,8 +69,8 @@ interface HouseData {
 function buildHouse(id: number, x: number, y: number, w: number, h: number, isStatic = false, mini = false): HouseData {
   const color = colorFor(id);
   const body = Bodies.rectangle(x, y, w, h, {
-    isStatic, friction: 0.9, frictionStatic: 0.99,
-    restitution: 0.0, density: 0.004, slop: 0.1,
+    isStatic, friction: 0.95, frictionStatic: 1.0,
+    restitution: 0.0, density: 0.004, slop: 0.05,
     chamfer: { radius: 1 }, label: `house-${id}`,
   });
   return { id, width: w, height: h, bodyColor: color.body, roofColor: color.roof, trimColor: color.trim, windows: id % 3 === 1 ? 3 : 2, mini, body };
@@ -122,13 +121,13 @@ export function useTowerGame(
 
   const setupWorld = useCallback(() => {
     const engine = Engine.create({ enableSleeping: true, positionIterations: 20, velocityIterations: 16 });
-    engine.gravity.y = 1.0; engine.gravity.scale = 0.0006;
+    engine.gravity.y = 1.0; engine.gravity.scale = 0.0008;
     const ground = Bodies.rectangle(WIDTH / 2, GROUND_Y + 23, WIDTH * 3, 46, { isStatic: true, friction: 0.96, label: 'ground' });
     World.add(engine.world, ground);
-    let y = GROUND_Y;
-    housesRef.current = [{ width: 208, height: 92, x: 220 }].map((s, i) => {
-      const cy = y - s.height / 2; y -= s.height;
-      return buildHouse(-3 + i, s.x, cy, s.width, s.height, true);
+    // Базовое тело = синий Casino (140x88, bottom=90px → center y = 720-90-44 = 586)
+    const casinoY = 720 - 90 - 44; // = 586
+    housesRef.current = [{ width: 140, height: 88, x: 220 }].map((s, i) => {
+      return buildHouse(-3 + i, s.x, casinoY, s.width, s.height, true);
     });
     World.add(engine.world, housesRef.current.map(h => h.body));
     engineRef.current = engine; groundRef.current = ground;
@@ -205,18 +204,14 @@ export function useTowerGame(
 
     const publish = () => {
       const v = valuesRef.current;
-      // Рендерим ВСЕ дома из физики — включая летящий (он уже в housesRef)
-      // Отдельный fallingHouse не нужен — летящий дом виден в houses
-      flushSync(() => {
-        setSnapshot({
-          status: statusRef.current,
-          houses: housesRef.current.map(snapshotHouse),
-          activeHouse: activeRef.current ? { ...activeRef.current } : null,
-          fallingHouse: null,
-          cameraOffset: cameraOffsetRef.current, sessionEarnings: v.sessionEarnings,
-          placedCount: v.placedCount, bestHeight: v.bestHeight,
-          lives: v.lives, lastAward: v.lastAward, rewardPerHouse: getReward(),
-        });
+      setSnapshot({
+        status: statusRef.current,
+        houses: housesRef.current.map(snapshotHouse),
+        activeHouse: activeRef.current ? { ...activeRef.current } : null,
+        fallingHouse: null,
+        cameraOffset: cameraOffsetRef.current, sessionEarnings: v.sessionEarnings,
+        placedCount: v.placedCount, bestHeight: v.bestHeight,
+        lives: v.lives, lastAward: v.lastAward, rewardPerHouse: getReward(),
       });
     };
 

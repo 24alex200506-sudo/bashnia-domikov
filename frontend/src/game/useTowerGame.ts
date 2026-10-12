@@ -71,7 +71,7 @@ function buildHouse(id: number, x: number, y: number, w: number, h: number, isSt
   const color = colorFor(id);
   const body = Bodies.rectangle(x, y, w, h, {
     isStatic, friction: 0.9, frictionStatic: 0.99,
-    restitution: 0.0, density: 0.004, slop: 0.05,
+    restitution: 0.0, density: 0.004, slop: 0.1,
     chamfer: { radius: 1 }, label: `house-${id}`,
   });
   return { id, width: w, height: h, bodyColor: color.body, roofColor: color.roof, trimColor: color.trim, windows: id % 3 === 1 ? 3 : 2, mini, body };
@@ -121,8 +121,8 @@ export function useTowerGame(
   const getReward = useCallback(() => Math.round(BASE_REWARD * getBetMultiplier(activeBetRef.current)), []);
 
   const setupWorld = useCallback(() => {
-    const engine = Engine.create({ enableSleeping: true });
-    engine.gravity.y = 1.12; engine.gravity.scale = 0.001;
+    const engine = Engine.create({ enableSleeping: true, positionIterations: 10, velocityIterations: 8 });
+    engine.gravity.y = 1.0; engine.gravity.scale = 0.0004;
     const ground = Bodies.rectangle(WIDTH / 2, GROUND_Y + 23, WIDTH * 3, 46, { isStatic: true, friction: 0.96, label: 'ground' });
     World.add(engine.world, ground);
     let y = GROUND_Y;

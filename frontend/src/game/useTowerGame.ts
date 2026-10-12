@@ -88,6 +88,7 @@ export function useTowerGame(
   const engineRef   = useRef<Engine | null>(null);
   const housesRef   = useRef<HouseData[]>([]);
   const groundRef   = useRef<Body | null>(null);
+  const casinoRef   = useRef<Body | null>(null);
   const activeRef   = useRef<ActiveHouseView | null>(null);
   const cameraOffsetRef  = useRef(0);
   const cameraTargetRef  = useRef(0);
@@ -131,6 +132,7 @@ export function useTowerGame(
       isStatic: true, friction: 1.0, frictionStatic: 1.0, label: 'casino',
     });
     World.add(engine.world, casinoPlatform);
+    casinoRef.current = casinoPlatform;
     // Базовый домик больше не нужен — Casino платформа заменяет его
     housesRef.current = [];
     World.add(engine.world, housesRef.current.map(h => h.body));
@@ -242,6 +244,8 @@ export function useTowerGame(
           const newest = housesRef.current[housesRef.current.length - 1];
           if (newest && groundRef.current) {
             const others = housesRef.current.slice(0, -1).map(h => h.body);
+            // Включаем Casino платформу как опору
+            if (casinoRef.current) others.push(casinoRef.current);
             const onHouse  = Query.collides(newest.body, others).length > 0;
             const onGround = Query.collides(newest.body, [groundRef.current]).length > 0;
             const speed = Math.abs(newest.body.velocity.x) + Math.abs(newest.body.velocity.y) + Math.abs(newest.body.angularVelocity) * 20;

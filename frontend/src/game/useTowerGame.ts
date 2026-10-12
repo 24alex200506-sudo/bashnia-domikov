@@ -122,7 +122,7 @@ export function useTowerGame(
 
   const setupWorld = useCallback(() => {
     const engine = Engine.create({ enableSleeping: true, positionIterations: 10, velocityIterations: 8 });
-    engine.gravity.y = 1.0; engine.gravity.scale = 0.0004;
+    engine.gravity.y = 1.0; engine.gravity.scale = 0.001;
     const ground = Bodies.rectangle(WIDTH / 2, GROUND_Y + 23, WIDTH * 3, 46, { isStatic: true, friction: 0.96, label: 'ground' });
     World.add(engine.world, ground);
     let y = GROUND_Y;
@@ -145,11 +145,16 @@ export function useTowerGame(
     const size = NEXT_HOUSES[id % NEXT_HOUSES.length];
     const color = colorFor(id);
     const mini = placedSinceMiniRef.current >= miniIntervalRef.current;
-    const top = Math.min(...housesRef.current.map(h => h.body.position.y - h.height / 2));
+    const w = mini ? Math.round(size.width  * 0.68) : size.width;
+    const h = mini ? Math.round(size.height * 0.78) : size.height;
+    // Домик висит на цепи: hook=20px + chainLen + half height
+    // chainLen зависит от количества поставленных домиков
+    const chainLen = Math.max(60, Math.min(200, 60 + valuesRef.current.placedCount * 8));
+    const craneY = 20 + chainLen + h * 0.9 / 2; // позиция центра домика на цепи в 720px координатах
     activeRef.current = {
-      x: 220, y: top - size.height / 2 - 54,
-      width:  mini ? Math.round(size.width  * 0.68) : size.width,
-      height: mini ? Math.round(size.height * 0.78) : size.height,
+      x: 220,
+      y: craneY,
+      width: w, height: h,
       bodyColor: color.body, roofColor: color.roof, trimColor: color.trim,
       windows: id % 3 === 1 ? 3 : 2, mini,
     };
@@ -171,7 +176,8 @@ export function useTowerGame(
     if (statusRef.current !== 'moving' || !activeRef.current || !engineRef.current) return;
     const active = activeRef.current;
     const id = nextIdRef.current;
-    const h = buildHouse(id, active.x, active.y, active.width, active.height, false, active.mini);
+    // Всегда создаём домик по центру (x=220) — он качается визуально но падает по центру
+    const h = buildHouse(id, 220, active.y, active.width, active.height, false, active.mini);
     Body.setVelocity(h.body, { x: 0, y: 0 });
     housesRef.current.push(h);
     World.add(engineRef.current.world, h.body);

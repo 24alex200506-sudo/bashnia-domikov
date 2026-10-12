@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { Bodies, Body, Engine, Query, Sleeping, World } from 'matter-js';
 import { getBetMultiplier } from './useBalance';
 
@@ -199,22 +200,22 @@ export function useTowerGame(
 
     const publish = () => {
       const v = valuesRef.current;
-      // fallingHouse — показываем только пока домик реально движется
       const isSettling = statusRef.current === 'settling';
       const newestHouse = isSettling && housesRef.current.length > 0
         ? housesRef.current[housesRef.current.length - 1]
         : null;
-      // Показываем пока не стал статическим И dropAge < 3000мс
       const fallingHouse = (newestHouse && !newestHouse.body.isStatic && dropAgeRef.current < 3000)
         ? snapshotHouse(newestHouse)
         : null;
-      setSnapshot({
-        status: statusRef.current, houses: housesRef.current.map(snapshotHouse),
-        activeHouse: activeRef.current ? { ...activeRef.current } : null,
-        fallingHouse,
-        cameraOffset: cameraOffsetRef.current, sessionEarnings: v.sessionEarnings,
-        placedCount: v.placedCount, bestHeight: v.bestHeight,
-        lives: v.lives, lastAward: v.lastAward, rewardPerHouse: getReward(),
+      flushSync(() => {
+        setSnapshot({
+          status: statusRef.current, houses: housesRef.current.map(snapshotHouse),
+          activeHouse: activeRef.current ? { ...activeRef.current } : null,
+          fallingHouse,
+          cameraOffset: cameraOffsetRef.current, sessionEarnings: v.sessionEarnings,
+          placedCount: v.placedCount, bestHeight: v.bestHeight,
+          lives: v.lives, lastAward: v.lastAward, rewardPerHouse: getReward(),
+        });
       });
     };
 

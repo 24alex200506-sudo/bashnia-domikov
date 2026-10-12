@@ -69,7 +69,7 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 
 /* Houses */
 .stage-houses{position:absolute;inset:0;}
-.house{position:absolute;transform-origin:center center;filter:drop-shadow(0 3px 1px rgba(0,0,0,.3));}
+.house{position:absolute;transform-origin:center center;filter:drop-shadow(0 3px 1px rgba(0,0,0,.3));transition:top 0.016s linear, left 0.016s linear;}
 .house-body{position:absolute;left:0;bottom:0;width:100%;height:78%;border:2px solid rgba(255,255,255,.3);border-radius:3px 3px 2px 2px;box-shadow:inset -9px 0 rgba(0,0,0,.12);}
 .house-roof{position:absolute;z-index:1;left:-5%;top:0;width:110%;height:21%;border-radius:4px 4px 1px 1px;background:var(--roof);box-shadow:0 3px 0 rgba(0,0,0,.2);}
 .house-trim{position:absolute;z-index:2;left:-4%;width:108%;bottom:0;height:9%;background:var(--trim);border-radius:2px;}

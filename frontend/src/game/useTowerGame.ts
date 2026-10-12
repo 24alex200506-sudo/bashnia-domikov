@@ -69,9 +69,9 @@ interface HouseData {
 function buildHouse(id: number, x: number, y: number, w: number, h: number, isStatic = false, mini = false): HouseData {
   const color = colorFor(id);
   const body = Bodies.rectangle(x, y, w, h, {
-    isStatic, friction: 0.83, frictionStatic: 0.96,
-    restitution: 0.025, density: 0.0021, slop: 0.7,
-    chamfer: { radius: 2 }, label: `house-${id}`,
+    isStatic, friction: 0.9, frictionStatic: 0.99,
+    restitution: 0.0, density: 0.004, slop: 0.05,
+    chamfer: { radius: 1 }, label: `house-${id}`,
   });
   return { id, width: w, height: h, bodyColor: color.body, roofColor: color.roof, trimColor: color.trim, windows: id % 3 === 1 ? 3 : 2, mini, body };
 }
@@ -171,7 +171,8 @@ export function useTowerGame(
     const active = activeRef.current;
     const id = nextIdRef.current;
     const h = buildHouse(id, active.x, active.y, active.width, active.height, false, active.mini);
-    Body.setVelocity(h.body, { x: Math.cos(waveRef.current) * 0.22, y: 0 });
+    // Убираем горизонтальную скорость — домик падает строго вниз
+    Body.setVelocity(h.body, { x: 0, y: 0 });
     housesRef.current.push(h);
     World.add(engineRef.current.world, h.body);
     nextIdRef.current += 1;
@@ -203,8 +204,8 @@ export function useTowerGame(
       const newestHouse = isSettling && housesRef.current.length > 0
         ? housesRef.current[housesRef.current.length - 1]
         : null;
-      // Показываем только если домик не статический (ещё в воздухе)
-      const fallingHouse = (newestHouse && !newestHouse.body.isStatic)
+      // Показываем пока не стал статическим И dropAge < 3000мс
+      const fallingHouse = (newestHouse && !newestHouse.body.isStatic && dropAgeRef.current < 3000)
         ? snapshotHouse(newestHouse)
         : null;
       setSnapshot({

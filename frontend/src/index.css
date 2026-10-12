@@ -64,7 +64,8 @@ button:disabled{opacity:.5;cursor:not-allowed;}
 .casino-body{background:linear-gradient(180deg,#1e88e5,#1565c0);border:2px solid #0a4a80;border-top:none;padding:8px;display:flex;gap:4px;justify-content:center;align-items:flex-end;}
 .casino-door{width:28px;height:38px;background:linear-gradient(180deg,#42a5f5,#1e88e5);border:2px solid #0a4a80;border-radius:3px 3px 0 0;}
 .casino-window{width:22px;height:22px;background:linear-gradient(135deg,#90caf9,#42a5f5);border:2px solid #0a4a80;border-radius:3px;margin-bottom:4px;}
-.ground-road{position:absolute;bottom:0;left:0;right:0;z-index:4;height:90px;background:linear-gradient(180deg,#3d3d3d,#2a2a2a);}
+/* Дорога — на переднем плане, поверх зданий фона */
+.ground-road{position:absolute;bottom:0;left:0;right:0;z-index:8;height:90px;background:linear-gradient(180deg,#3d3d3d,#2a2a2a);}
 .ground-road::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(90deg,#f5c842 0 24px,#1a1a1a 24px 48px);}
 
 /* Houses */

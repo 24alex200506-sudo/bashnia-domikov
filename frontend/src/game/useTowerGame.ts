@@ -172,12 +172,13 @@ export function useTowerGame(
     const active = activeRef.current;
     const id = nextIdRef.current;
     const h = buildHouse(id, active.x, active.y, active.width, active.height, false, active.mini);
-    // Убираем горизонтальную скорость — домик падает строго вниз
     Body.setVelocity(h.body, { x: 0, y: 0 });
     housesRef.current.push(h);
     World.add(engineRef.current.world, h.body);
     nextIdRef.current += 1;
-    activeRef.current = null; statusRef.current = 'settling';
+    // НЕ убираем activeRef сразу — оставляем для отображения падения
+    // activeRef обнулится в следующем кадре через publish
+    statusRef.current = 'settling';
     stableFramesRef.current = 0; dropAgeRef.current = 0; failedRef.current = false;
   }, []);
 
@@ -207,11 +208,31 @@ export function useTowerGame(
       const fallingHouse = (newestHouse && !newestHouse.body.isStatic && dropAgeRef.current < 3000)
         ? snapshotHouse(newestHouse)
         : null;
+
+      // Пока settling — activeHouse следует за физическим телом (показывает падение)
+      let activeHouse = activeRef.current ? { ...activeRef.current } : null;
+      if (isSettling && newestHouse && fallingHouse) {
+        // Показываем позицию из физики — плавное падение
+        activeHouse = {
+          x: fallingHouse.x,
+          y: fallingHouse.y,
+          width: fallingHouse.width,
+          height: fallingHouse.height,
+          bodyColor: fallingHouse.bodyColor,
+          roofColor: fallingHouse.roofColor,
+          trimColor: fallingHouse.trimColor,
+          windows: fallingHouse.windows,
+          mini: fallingHouse.mini,
+        };
+      } else if (isSettling) {
+        activeHouse = null;
+      }
+
       flushSync(() => {
         setSnapshot({
           status: statusRef.current, houses: housesRef.current.map(snapshotHouse),
-          activeHouse: activeRef.current ? { ...activeRef.current } : null,
-          fallingHouse,
+          activeHouse,
+          fallingHouse: null, // больше не нужен — используем activeHouse
           cameraOffset: cameraOffsetRef.current, sessionEarnings: v.sessionEarnings,
           placedCount: v.placedCount, bestHeight: v.bestHeight,
           lives: v.lives, lastAward: v.lastAward, rewardPerHouse: getReward(),
